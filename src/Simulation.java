@@ -15,11 +15,29 @@ public class Simulation {
     }
 
     public void run(){
+
+        killOldBacteria();
+
+        //Adds a new bacteria to the simulation
         Bacteria b = new Bacteria(WIDTH, HEIGHT);
         bacteriaList.add(b);
 
+        //Each bacteria acts independently (very prototype)
         for(int i = 0; i < bacteriaList.size(); i++){
             bacteriaList.get(i).act();
+        }
+    }
+
+    public void killOldBacteria(){
+
+        Bacteria b;
+
+        for(int i = 0; i < bacteriaList.size(); i++){
+            b = bacteriaList.get(i);
+
+            if (b.getAge() > 100){
+                bacteriaList.remove(b);
+            }
         }
     }
 
@@ -28,6 +46,7 @@ public class Simulation {
         return (h * WIDTH) + w;
     }
 
+    //Placeholder for adding a bacteria to the simulation matrix
     public void addSimulation(Bacteria b){
         simulationArray[simulationGetPos(b.getXpos(), b.getYpos())] = 0;
     }

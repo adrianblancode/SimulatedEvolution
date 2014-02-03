@@ -9,11 +9,13 @@ public class Bacteria {
     private int HEIGHT;
 
     private int age;
+    private int size;
 
     public Bacteria(int W, int H){
         WIDTH = W;
         HEIGHT = H;
         age = 0;
+        size = 4;
         spawn();
     }
 
@@ -33,10 +35,23 @@ public class Bacteria {
         ypos = i;
     }
 
+    public int getSize(){
+        return size;
+    }
+
     public void act(){
         age++;
-        int pos = getXpos() + 1;
-        setXpos(checkXbounds(pos));
+        int pos = getYpos() + 1;
+        setYpos(checkYbounds(pos));
+
+        Random rand = new Random();
+        int value = 0;
+        int chance = rand.nextInt(2);
+        if(chance == 0){
+            value = rand.nextInt(2) - 1;
+        }
+
+        setXpos(checkXbounds(getXpos() + value));
     }
 
     private void spawn(){
@@ -49,6 +64,10 @@ public class Bacteria {
 
         value = rand.nextInt(HEIGHT);
         setYpos(value);
+    }
+
+    public int getAge(){
+        return age;
     }
 
     private int checkXbounds(int x){
@@ -76,4 +95,5 @@ public class Bacteria {
 
         else return y;
     }
+
 }

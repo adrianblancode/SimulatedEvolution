@@ -22,14 +22,16 @@ public class Start {
         final int WIDTH = 250;
         final int HEIGHT = 150;
         final int scale = 4; //We need to bump up internal resolution so everything is not just one pixel
+        final int SLEEP = 1000/120; //Number of milliseconds we sleep between each frame
 
-        final JFrame myFrame = new JFrame("Evolution"); //title
+        final JFrame myFrame = new JFrame("Simulated Evolution"); //title
 
-        myFrame.setSize(new Dimension(WIDTH * scale, HEIGHT * scale + 22)); //+22?
-        myFrame.setVisible(true);
-        myFrame.setResizable(false);
+        myFrame.setSize(new Dimension(WIDTH * scale + 6, HEIGHT * scale + 28)); //Including offsets for the frame borders
         //myFrame.setExtendedState(JFrame.MAXIMIZED_BOTH); //fullscreen
         //myFrame.setUndecorated(true); //noborder
+        myFrame.setVisible(true);
+        myFrame.setResizable(false);
+
         initWindowClose(myFrame);
 
         sim = new Simulation(WIDTH, HEIGHT);
@@ -39,8 +41,22 @@ public class Start {
 
         //Simulation loop
         while(true){
+            long time = System.nanoTime();
+
+            //We pause the thread a bit so we don't run it full speed, should sleep after draw but whatever
+            try {Thread.sleep(SLEEP);}
+            catch (InterruptedException e) {e.printStackTrace();}
+
             sim.run();
-            canvas.update(canvas.getGraphics());
+            canvas.paint();
+
+            time = System.nanoTime() - time;
+            float res = 1 / ((time) / 1000000000f);
+
+            canvas.drawText(Integer.toString((int) res), 0, 12);
+            canvas.update();
+
+
         }
 
     }
