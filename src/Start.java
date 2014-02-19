@@ -19,14 +19,11 @@ public class Start {
         MainCanvas canvas;
 
         //Make static or something
-        final int WIDTH = 250;
-        final int HEIGHT = 150;
-        final int scale = 4; //We need to bump up internal resolution so everything is not just one pixel
         final int SLEEP = 1000/120; //Number of milliseconds we sleep between each frame
 
         final JFrame myFrame = new JFrame("Simulated Evolution"); //title
 
-        myFrame.setSize(new Dimension(WIDTH * scale + 6, HEIGHT * scale + 28)); //Including offsets for the frame borders
+        myFrame.setSize(new Dimension(Constants.WIDTH + 6, Constants.HEIGHT + 28)); //Including offsets for the frame borders
         //myFrame.setExtendedState(JFrame.MAXIMIZED_BOTH); //fullscreen
         //myFrame.setUndecorated(true); //noborder
         myFrame.setVisible(true);
@@ -34,8 +31,8 @@ public class Start {
 
         initWindowClose(myFrame);
 
-        sim = new Simulation(WIDTH, HEIGHT);
-        canvas = new MainCanvas(WIDTH * scale, HEIGHT * scale);
+        sim = new Simulation();
+        canvas = new MainCanvas();
         canvas.setSimulation(sim);
         myFrame.add("Center", canvas);
 
@@ -84,4 +81,5 @@ public class Start {
         myFrame.getRootPane().getActionMap().put("ESCAPE", escapeAction);
 
     }
+
 }

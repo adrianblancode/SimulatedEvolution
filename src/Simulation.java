@@ -2,53 +2,41 @@ import java.util.ArrayList;
 
 public class Simulation {
 
-    private int WIDTH;
-    private int HEIGHT;
-    private int [] simulationArray;
     private ArrayList<Bacteria> bacteriaList;
+    private ArrayList<SimulationEntity> foodList; //empty for now
 
-    public Simulation(int W, int H){
-        WIDTH = W;
-        HEIGHT = H;
-        simulationArray = new int[WIDTH * HEIGHT];
+    public Simulation(){
         bacteriaList = new ArrayList<Bacteria>();
     }
 
     public void run(){
 
-        killOldBacteria();
+        //We remove the old bacteria before the simulation tick, so that it does not affect it mid simulation
+        killBacteria();
 
         //Adds a new bacteria to the simulation
-        Bacteria b = new Bacteria(WIDTH, HEIGHT);
+        Bacteria b = new Bacteria();
         bacteriaList.add(b);
 
         //Each bacteria acts independently (very prototype)
         for(int i = 0; i < bacteriaList.size(); i++){
-            bacteriaList.get(i).act();
+            bacteriaList.get(i).act(bacteriaList);
         }
     }
 
-    public void killOldBacteria(){
+    //Removes all the dead bacteria from the list and sets their pointers to null
+    public void killBacteria(){
 
         Bacteria b;
 
         for(int i = 0; i < bacteriaList.size(); i++){
             b = bacteriaList.get(i);
 
-            if (b.getAge() > 100){
+            if(b.isDead()){
                 bacteriaList.remove(b);
+                b = null;
             }
         }
-    }
-
-    //Converts 2D coordinates into our 1D matrix
-    public int simulationGetPos(int w, int h){
-        return (h * WIDTH) + w;
-    }
-
-    //Placeholder for adding a bacteria to the simulation matrix
-    public void addSimulation(Bacteria b){
-        simulationArray[simulationGetPos(b.getXpos(), b.getYpos())] = 0;
     }
 
     public ArrayList<Bacteria> getBacteriaList(){
