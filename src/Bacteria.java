@@ -43,19 +43,18 @@ public class Bacteria extends SimulationEntity{
         //Normalize the movement vector to get properly scaled end results
         movement.normalize();
 
-        //Move according to movement vector
-        //Make more pretty, now they only move diagoanlly
-        if(movement.getX() > 0){
+        //Moves according to the movement vector
+        if(movement.getX() > 0.3){
             movement.setX(1);
         }
-        else if(movement.getX() < 0){
+        else if(movement.getX() < - 0.3 ){
             movement.setX(-1);
         }
 
-        if(movement.getY() > 0){
+        if(movement.getY() > 0.3){
             movement.setY(1);
         }
-        else if(movement.getY() < 0){
+        else if(movement.getY() < -0.3){
             movement.setY(-1);
         }
 

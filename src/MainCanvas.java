@@ -1,12 +1,10 @@
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 class MainCanvas extends Canvas{
 
@@ -35,26 +33,10 @@ class MainCanvas extends Canvas{
         //Clears the picture to the default color
         doubleBuffer.clearRect(0, 0, Constants.WIDTH, Constants.HEIGHT);
 
-        //We get each bacteria and paint them out (TEMPORARY)
-        Bacteria bac;
-        ArrayList<Bacteria> bacList = sim.getBacteriaList();
+        for(Bacteria bac : sim.getBacteriaList()){
 
-        for(int i = 0; i < bacList.size(); i++){
-
-            bac = bacList.get(i);
-
-            int[] colour =  {255 - bac.getAge(), 255 - bac.getAge(), 255 - bac.getAge()};
-
-            //We paint the bacteria, pixel by
-            //MAKE NEW PRETTIER METHOD
-            for(int y = 0; y < 4; y++){
-                for(int x = 0; x < 4; x++){
-
-                    if(!outOfBounds(bac.getXpos() + x, bac.getYpos() + y)){
-                        raster.setPixel(bac.getXpos() + x, bac.getYpos() + y, colour);
-                    }
-                }
-            }
+            //Get the colour of the bacteria later
+            doubleBuffer.fillRect(bac.getXpos(), bac.getYpos(), 4, 4);
 
         }
         drawText("", 0, 0); //For some reason we need this to avoid a NullPointerException in drawText()
