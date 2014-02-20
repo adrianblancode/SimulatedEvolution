@@ -1,3 +1,5 @@
+import java.awt.*;
+
 /**
  * Created by Adrian on 2014-02-19.
  */
@@ -36,6 +38,11 @@ public abstract class SimulationEntity {
 		return energy;
 	}
 
+    //Do not call this directly, call the overloaded methods
+    public Color getColor(){
+        return new Color(255, 255, 255);
+    }
+
 	public void setEnergy(int energy) {
 		this.energy = energy;
 		if (this.energy > Constants.maxEnergy)
@@ -49,7 +56,7 @@ public abstract class SimulationEntity {
 	}
 	
 	public void dropEnergy(int energy) {
-		setEnergy(getEnergy()-energy);
+		setEnergy(getEnergy() - energy);
 	}
 
     public Vector distance(SimulationEntity se){

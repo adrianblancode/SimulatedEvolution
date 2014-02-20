@@ -11,7 +11,7 @@ public class Plant extends SimulationEntity {
     	color = new Color(0, 255, 0);
 
     	this.setEnergy(100);
-    	
+        setDead(false);
     	spawn();
     }
 	

@@ -58,17 +58,17 @@ public class Bacteria extends SimulationEntity{
         movement.normalize();
 
         //Moves according to the movement vector
-        if(movement.getX() > 0.3){
+        if(movement.getX() > 0.1){
             movement.setX(1);
         }
-        else if(movement.getX() < - 0.3 ){
+        else if(movement.getX() < - 0.1){
             movement.setX(-1);
         }
 
-        if(movement.getY() > 0.3){
+        if(movement.getY() > 0.1){
             movement.setY(1);
         }
-        else if(movement.getY() < -0.3){
+        else if(movement.getY() < -0.1){
             movement.setY(-1);
         }
 

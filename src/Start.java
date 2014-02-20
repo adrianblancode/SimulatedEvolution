@@ -18,8 +18,7 @@ public class Start {
         Simulation sim;
         MainCanvas canvas;
 
-        //Make static or something
-        final int SLEEP = 1000/120; //Number of milliseconds we sleep between each frame
+        int vSync = 100; //Number of FPS we have as upper limit
 
         final JFrame myFrame = new JFrame("Simulated Evolution"); //title
 
@@ -36,25 +35,35 @@ public class Start {
         canvas.setSimulation(sim);
         myFrame.add("Center", canvas);
 
+        int sleep = 0;
+        float res = 0;
+
         //Simulation loop
         while(true){
-            long time = System.nanoTime();
 
-            //We pause the thread a bit so we don't run it full speed, should sleep after draw but whatever
-            try {Thread.sleep(SLEEP);}
-            catch (InterruptedException e) {e.printStackTrace();}
+            long time = System.nanoTime();
 
             sim.run();
             canvas.paint();
-
-            time = System.nanoTime() - time;
-            float res = 1 / ((time) / 1000000000f);
 
             canvas.drawText(Integer.toString(sim.getTicks()), 0, 12);
             canvas.drawText(Integer.toString((int) res), 0, 24);
             canvas.update();
 
+            time = System.nanoTime() - time;
 
+            //We pause the thread a bit so we don't run it full speed
+            sleep = (1000 / vSync) - (int) time / 1000000;
+
+            if(sleep > 0){
+                try {Thread.sleep((sleep));}
+                catch (InterruptedException e) {e.printStackTrace();}
+            }
+            else{
+                sleep = 0;
+            }
+
+            res = 1000 / ((time/1000000) + sleep);
         }
 
     }

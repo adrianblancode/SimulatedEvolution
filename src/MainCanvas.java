@@ -3,13 +3,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.WritableRaster;
 
 class MainCanvas extends Canvas{
 
     private BufferedImage buffer;
-    private WritableRaster raster;
-
     private Graphics2D doubleBuffer;
     private Font systemFont;
     private Simulation sim;
@@ -17,8 +14,6 @@ class MainCanvas extends Canvas{
     public MainCanvas(){
 
         buffer = new BufferedImage(Constants.WIDTH, Constants.HEIGHT, BufferedImage.TYPE_INT_RGB);
-        raster = buffer.getRaster();
-
         doubleBuffer = (Graphics2D) buffer.getGraphics(); //this is the double buffer
         doubleBuffer.setBackground(new Color(30, 30, 30)); //Set the background color to be redrawn each frame
 
@@ -33,15 +28,11 @@ class MainCanvas extends Canvas{
         doubleBuffer.clearRect(0, 0, Constants.WIDTH, Constants.HEIGHT);
 
         for(Bacteria bac : sim.getBacteriaList()){
-
-            doubleBuffer.setColor(bac.getColor());
-            doubleBuffer.fillRect(bac.getXpos(), bac.getYpos(), 4, 4);
+            drawEntity(bac);
         }
 
         for(Plant p : sim.getFoodList()){
-
-            doubleBuffer.setColor(p.getColor());
-            doubleBuffer.fillRect(p.getXpos(), p.getYpos(), 4, 4);
+            drawEntity(p);
         }
 
         drawText("", 0, 0); //For some reason we need this to avoid a NullPointerException in drawText()
@@ -56,6 +47,11 @@ class MainCanvas extends Canvas{
     public void drawText(String st, int x, int y){
         doubleBuffer.setColor(Color.white);
         doubleBuffer.drawString(st, x, y);
+    }
+
+    public void drawEntity(SimulationEntity se){
+        doubleBuffer.setColor(se.getColor());
+        doubleBuffer.fillRect(se.getXpos(), se.getYpos(), 4, 4);
     }
 
     public void setSimulation(Simulation sim){
