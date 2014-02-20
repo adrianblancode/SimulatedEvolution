@@ -43,7 +43,7 @@ class MainCanvas extends Canvas{
 
             bac = bacList.get(i);
 
-            int[] colour =  {255 - 2 * bac.getAge(), 255 - 2 * bac.getAge(), 255 - 2 * bac.getAge()};
+            int[] colour =  {255 - bac.getAge(), 255 - bac.getAge(), 255 - bac.getAge()};
 
             //We paint the bacteria, pixel by
             //MAKE NEW PRETTIER METHOD

@@ -50,7 +50,8 @@ public class Start {
             time = System.nanoTime() - time;
             float res = 1 / ((time) / 1000000000f);
 
-            canvas.drawText(Integer.toString((int) res), 0, 12);
+            canvas.drawText(Integer.toString(sim.getTicks()), 0, 12);
+            canvas.drawText(Integer.toString((int) res), 0, 24);
             canvas.update();
 
 

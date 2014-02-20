@@ -21,21 +21,27 @@ public class Bacteria extends SimulationEntity{
         Vector dis;
         double len;
 
-        for(int i = 0; i < bl.size(); i++){
+        for(Bacteria bac : bl){
 
-            dis = distance(bl.get(i));
+            dis = distance(bac);
             len = dis.getLength();
 
             //We only act on what's in range of vision
-            if(len > 0 && len <= 100){
+            if(len > 0 && len <= Constants.maxVision){
 
-                //Things further away are less important
-                dis.scale((1 / len));
+                //First we normalize the vector to get the direction
+                dis.normalize();
+
+                //We make sure that vectors further away are less important
+                dis.scale(1 / len);
 
                 //We add the sum of all movements to the movement vector
                 movement.add(dis);
             }
         }
+
+        //Normalize the movement vector to get properly scaled end results
+        movement.normalize();
 
         //Move according to movement vector
         //Make more pretty, now they only move diagoanlly

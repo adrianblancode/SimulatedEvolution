@@ -42,6 +42,13 @@ public class Vector{
         setY(getY() + v.getY());
     }
 
+    public void normalize(){
+        if(getLength() != 0){
+            x = x / getLength();
+            y = y / getLength();
+        }
+    }
+
     //Scales the x and y values with a factor f
     public void scale(double f){
 
