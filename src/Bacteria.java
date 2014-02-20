@@ -1,19 +1,22 @@
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Random;
 
 public class Bacteria extends SimulationEntity{
 
     private int age;
-    private int dying;
+    private boolean dying;
 
     public Bacteria(){
         age = 0;
         setDead(false);
+        setDying(false);
+        setEnergy(200);
         spawn();
     }
 
     //How the bacteria acts each tick
-    public void act(ArrayList<Bacteria> bl){
+    public void act(ArrayList<Plant> pl){
 
         incrementAge();
 
@@ -21,9 +24,20 @@ public class Bacteria extends SimulationEntity{
         Vector dis;
         double len;
 
-        for(Bacteria bac : bl){
+        if(isDying()) return;
 
-            dis = distance(bac);
+        for(Plant p : pl){
+
+            dis = distance(p);
+            
+            // If we're next to a plant and it's alive. Eat it!
+            if (dis.getLength() < 5) {
+            	if (!p.isDead()) {
+            		p.setDead(true);
+            		addEnergy(p.getEnergy());
+            	}
+            }
+            
             len = dis.getLength();
 
             //We only act on what's in range of vision
@@ -81,12 +95,41 @@ public class Bacteria extends SimulationEntity{
         return age;
     }
 
+    public boolean isDying(){
+        return dying;
+    }
+
+    public void setDying(boolean b){
+        dying = b;
+    }
+    
+    public Color getColor() {
+        if (getEnergy() < 25) {
+            return new Color(255, 0, 0);
+        } else if (getEnergy() < 50) {
+            return new Color(200, 100, 0);
+        } else if (getEnergy() < 75) {
+            return new Color(255, 250, 0);
+        } else if (getEnergy() < 100) {
+            return new Color(255, 255, 75);
+        } else if (getEnergy() < 150) {
+            return new Color(255, 255, 150);
+        } else {
+            return new Color(255, 255, 255);
+        }
+    }
+
     //Adds one to age, if age is over max set dead
     public void incrementAge(){
         age = age + 1;
 
         if(age >= Constants.maxAge){
-            setDead(true);
+            setDying(true);
+        }
+        
+        dropEnergy(1);
+        if (getEnergy() == 0) {
+        	setDead(true);
         }
     }
 

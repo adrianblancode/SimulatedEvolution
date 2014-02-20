@@ -4,7 +4,6 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
-import java.util.ArrayList;
 
 class MainCanvas extends Canvas{
 
@@ -35,10 +34,16 @@ class MainCanvas extends Canvas{
 
         for(Bacteria bac : sim.getBacteriaList()){
 
-            //Get the colour of the bacteria later
+            doubleBuffer.setColor(bac.getColor());
             doubleBuffer.fillRect(bac.getXpos(), bac.getYpos(), 4, 4);
-
         }
+
+        for(Plant p : sim.getFoodList()){
+
+            doubleBuffer.setColor(p.getColor());
+            doubleBuffer.fillRect(p.getXpos(), p.getYpos(), 4, 4);
+        }
+
         drawText("", 0, 0); //For some reason we need this to avoid a NullPointerException in drawText()
         update();
     }
@@ -49,20 +54,11 @@ class MainCanvas extends Canvas{
     }
 
     public void drawText(String st, int x, int y){
+        doubleBuffer.setColor(Color.white);
         doubleBuffer.drawString(st, x, y);
     }
 
     public void setSimulation(Simulation sim){
         this.sim = sim;
-    }
-
-    public boolean outOfBounds(int x, int y){
-        if(x < 0 || x >= Constants.WIDTH){
-            return true;
-        }
-        else if(y < 0 || y >= Constants.HEIGHT){
-            return true;
-        }
-        else return false;
     }
 }
