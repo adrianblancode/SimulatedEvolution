@@ -42,9 +42,11 @@ class MainCanvas extends Canvas{
         for(int i = 0; i < bacList.size(); i++){
 
             bac = bacList.get(i);
+           
 
-            int[] colour =  {255 - bac.getAge(), 255 - bac.getAge(), 255 - bac.getAge()};
+            int[] colour =  {bac.getColor().getRed(), bac.getColor().getGreen(), bac.getColor().getBlue()};
 
+            
             //We paint the bacteria, pixel by
             //MAKE NEW PRETTIER METHOD
             for(int y = 0; y < 4; y++){
@@ -59,6 +61,37 @@ class MainCanvas extends Canvas{
         }
         drawText("", 0, 0); //For some reason we need this to avoid a NullPointerException in drawText()
         update();
+        
+        
+        /****************************/
+        
+        //We get each bacteria and paint them out (TEMPORARY)
+        Plant p;
+        ArrayList<Plant> foodList = sim.getFoodList();
+
+        for(int i = 0; i < foodList.size(); i++){
+
+            p = foodList.get(i);
+
+            int[] colour =  {p.getColor().getRed(), p.getColor().getGreen(), p.getColor().getBlue()};
+
+            //We paint the bacteria, pixel by
+            //MAKE NEW PRETTIER METHOD
+            for(int y = 0; y < 4; y++){
+                for(int x = 0; x < 4; x++){
+
+                    if(!outOfBounds(p.getXpos() + x, p.getYpos() + y)){
+                        raster.setPixel(p.getXpos() + x, p.getYpos() + y, colour);
+                    }
+                }
+            }
+
+        }
+        drawText("", 0, 0); //For some reason we need this to avoid a NullPointerException in drawText()
+        update();
+        
+        /******************************/
+        
     }
 
     //Quickly update the canvas

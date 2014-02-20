@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -5,25 +6,54 @@ public class Bacteria extends SimulationEntity{
 
     private int age;
     private int dying;
+    private Color color;
 
     public Bacteria(){
+    	color = new Color(255, 255, 255);
         age = 0;
         setDead(false);
+        setEnergy(50);
         spawn();
     }
 
     //How the bacteria acts each tick
-    public void act(ArrayList<Bacteria> bl){
+    public void act(ArrayList<Plant> pl){
 
         incrementAge();
+        
+        int e = getEnergy();
+        
+        if (e < 25) {
+        	color = new Color(255, 0, 0);
+        } else if (e < 50) {
+        	color = new Color(200, 100, 0);
+        } else if (e < 75) {
+        	color = new Color(255, 250, 0);
+        } else if (e < 100) {
+        	color = new Color(255, 255, 75);
+        } else if (e < 150) {
+        	color = new Color(255, 255, 150);
+        } else {
+        	color = new Color(255, 255, 255);
+        }
+        
 
         Vector movement = new Vector(0, 0);
         Vector dis;
         double len;
 
-        for(Bacteria bac : bl){
+        for(Plant p : pl){
 
-            dis = distance(bac);
+            dis = distance(p);
+            
+            // If we're next to a plant and it's alive. Eat it!
+            if (dis.getLength() < 5) {
+            	if (!p.isDead()) {
+            		p.setDead(true);
+            		addEnergy(p.getEnergy());
+            	}
+            }
+            
             len = dis.getLength();
 
             //We only act on what's in range of vision
@@ -81,6 +111,10 @@ public class Bacteria extends SimulationEntity{
     public int getAge(){
         return age;
     }
+    
+    public Color getColor() {
+    	return color;
+    }
 
     //Adds one to age, if age is over max set dead
     public void incrementAge(){
@@ -88,6 +122,11 @@ public class Bacteria extends SimulationEntity{
 
         if(age >= Constants.maxAge){
             setDead(true);
+        }
+        
+        dropEnergy(1);
+        if (getEnergy() == 0) {
+        	setDead(true);
         }
     }
 
