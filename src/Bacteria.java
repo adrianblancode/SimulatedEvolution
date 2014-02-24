@@ -6,12 +6,14 @@ public class Bacteria extends SimulationEntity{
 
     private int age;
     private boolean dying;
+    private Genetics gen;
 
     public Bacteria(){
         age = 0;
         setDead(false);
         setDying(false);
         setEnergy(200);
+        gen = new Genetics();
         spawn();
     }
 
@@ -102,21 +104,17 @@ public class Bacteria extends SimulationEntity{
     public void setDying(boolean b){
         dying = b;
     }
+
+    public float getHunger(){
+        return ((float) getEnergy() / Constants.maxEnergy);
+    }
     
     public Color getColor() {
-        if (getEnergy() < 25) {
-            return new Color(255, 0, 0);
-        } else if (getEnergy() < 50) {
-            return new Color(200, 100, 0);
-        } else if (getEnergy() < 75) {
-            return new Color(255, 250, 0);
-        } else if (getEnergy() < 100) {
-            return new Color(255, 255, 75);
-        } else if (getEnergy() < 150) {
-            return new Color(255, 255, 150);
-        } else {
-            return new Color(255, 255, 255);
-        }
+        //Background is (30, 30 , 30), with 50 it's still visible while almost dead
+        int red = 50 + (int) ((100 + 100 * gen.getAggression()) * getHunger());
+        int blue = 50 + (int)((100 - 100 * gen.getAggression()) * getHunger());
+        int green = 50 + (int) (getHunger());
+        return new Color(red, green, blue);
     }
 
     //Adds one to age, if age is over max set dead

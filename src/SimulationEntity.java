@@ -38,11 +38,6 @@ public abstract class SimulationEntity {
 		return energy;
 	}
 
-    //Do not call this directly, call the overloaded methods
-    public Color getColor(){
-        return new Color(255, 255, 255);
-    }
-
 	public void setEnergy(int energy) {
 		this.energy = energy;
 		if (this.energy > Constants.maxEnergy)
@@ -52,16 +47,31 @@ public abstract class SimulationEntity {
 	}
 	
 	public void addEnergy(int energy) {
-		setEnergy(getEnergy()+energy);
+		if(getEnergy() + energy <= Constants.maxEnergy){
+            setEnergy(getEnergy() + energy);
+        }
+       else{
+            setEnergy(Constants.maxEnergy);
+        }
 	}
 	
 	public void dropEnergy(int energy) {
-		setEnergy(getEnergy() - energy);
+        if(getEnergy() - energy >= 0){
+		    setEnergy(getEnergy() - energy);
+        }
+        else{
+            setEnergy(0);
+        }
 	}
 
     public Vector distance(SimulationEntity se){
         int xd = se.getXpos() - getXpos();
         int yd = se.getYpos() - getYpos();
         return new Vector(xd, yd);
+    }
+
+    //Do not call this directly, call the overloaded methods
+    public Color getColor(){
+        return new Color(255, 255, 255);
     }
 }
