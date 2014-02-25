@@ -9,12 +9,30 @@ public class Bacteria extends SimulationEntity{
     private Genetics gen;
 
     public Bacteria(){
+        this(new Genetics());
+    }
+    
+    public Bacteria(Genetics genetics){
         age = 0;
         setDead(false);
         setDying(false);
-        setEnergy(200);
-        gen = new Genetics();
+        setEnergy(Constants.maxEnergy/2);
+        gen = genetics;
         spawn();
+        System.out.println("New bacteria created with random positions.");
+    }
+    
+    public Bacteria(Genetics genetics, int xpos, int ypos){
+        age = 0;
+        setDead(false);
+        setDying(false);
+        setEnergy(Constants.maxEnergy/2);
+        gen = genetics;
+
+        setXpos(xpos);
+        setYpos(ypos);
+        
+        System.out.println("New bacteria created with starting positions.");
     }
 
     //How the bacteria acts each tick
@@ -33,10 +51,13 @@ public class Bacteria extends SimulationEntity{
             dis = distance(p);
             
             // If we're next to a plant and it's alive. Eat it!
-            if (dis.getLength() < 5) {
-            	if (!p.isDead()) {
-            		p.setDead(true);
-            		addEnergy(p.getEnergy());
+            if (dis.getLength() < 5 && this.getEnergy() < (int)(Constants.maxEnergy * 0.9)) {
+            	if (!p.isDead() && p.getEnergy() > 0) {
+            		p.dropEnergy(100);
+            		if (p.getEnergy() <= 0) {
+            			p.setDead(true);
+            		}
+            		addEnergy(Math.min(p.getEnergy(), 100));
             	}
             }
             
@@ -109,7 +130,11 @@ public class Bacteria extends SimulationEntity{
         return ((float) getEnergy() / Constants.maxEnergy);
     }
     
-    public Color getColor() {
+    public Genetics getGen() {
+		return gen;
+	}
+
+	public Color getColor() {
         //Background is (30, 30 , 30), with 50 it's still visible while almost dead
         int red = 50 + (int) ((100 + 100 * gen.getAggression()) * getHunger());
         int blue = 50 + (int)((100 - 100 * gen.getAggression()) * getHunger());

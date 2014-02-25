@@ -10,12 +10,20 @@ public class Genetics {
     private float herbivoreAttraction;
     private float carnivoreAttraction;
 
-    //Default placeholder
+    //Creates a gene with pre-defined values.
     public Genetics(){
         setAggression(0f);
         setFoodAttraction(0.5f);
         setHerbivoreAttraction(0f);
         setCarnivoreAttraction(0f);
+    }
+    
+    // Creates a copy of some existing genetics.
+    public Genetics(Genetics oldGen){
+        setAggression(oldGen.getAggression());
+        setFoodAttraction(oldGen.getFoodAttraction());
+        setHerbivoreAttraction(oldGen.getHerbivoreAttraction());
+        setCarnivoreAttraction(oldGen.getCarnivoreAttraction());
     }
 
     public float getAggression() {
