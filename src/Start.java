@@ -37,6 +37,9 @@ public class Start {
 
         int sleep = 0;
         float res = 0;
+        
+        // Runs statup on the simulation.
+        sim.start(50);
 
         //Simulation loop
         while(true){

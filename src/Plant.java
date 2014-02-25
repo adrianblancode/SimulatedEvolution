@@ -10,7 +10,7 @@ public class Plant extends SimulationEntity {
     	rand = new Random();
     	color = new Color(0, 255, 0);
 
-    	this.setEnergy(100);
+    	this.setEnergy(500);
         setDead(false);
     	spawn();
     }

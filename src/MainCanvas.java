@@ -27,12 +27,12 @@ class MainCanvas extends Canvas{
         //Clears the picture to the default color
         doubleBuffer.clearRect(0, 0, Constants.WIDTH, Constants.HEIGHT);
 
-        for(Bacteria bac : sim.getBacteriaList()){
-            drawEntity(bac);
-        }
-
         for(Plant p : sim.getFoodList()){
             drawEntity(p);
+        }
+        
+        for(Bacteria bac : sim.getBacteriaList()){
+            drawEntity(bac);
         }
 
         drawText("", 0, 0); //For some reason we need this to avoid a NullPointerException in drawText()
