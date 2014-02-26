@@ -5,12 +5,12 @@ import java.util.Random;
 public class Simulation {
 
     private ArrayList<Bacteria> bacteriaList;
-    private ArrayList<Plant> foodList;
+    private ArrayList<Plant> plantList;
     private int ticks;
 
     public Simulation(){
         bacteriaList = new ArrayList<Bacteria>();
-        foodList = new ArrayList<Plant>();
+        plantList = new ArrayList<Plant>();
         ticks = 0;
     }
     
@@ -22,7 +22,7 @@ public class Simulation {
             
             // Add a new plant to the simulation
             Plant p = new Plant();
-            foodList.add(p);
+            plantList.add(p);
             
     	}
     }
@@ -30,32 +30,24 @@ public class Simulation {
     public void run() {
 
         incrementTicks();
-        
-        
+
         // We do the reproduction first. That way the old bacteria will be cleaned away right afterwards.
         doReproduction();
-        
 
         //We remove the old bacteria before the simulation tick, so that it does not affect it mid simulation
         removeDeadBacteria();
         removeDeadPlants();
-        
-        
-        //Adds a new bacteria to the simulation
-        //Bacteria b = new Bacteria();
-        //bacteriaList.add(b);
-        
-        
+
         // Add a new plant to the simulation
         Random r = new Random();
-        if (r.nextInt(2) == 0) { // Fulkodat, gör färre plants.
+        if (r.nextInt(2) == 0) { // Fulkodat, gï¿½r fï¿½rre plants.
         	Plant p = new Plant();
-        	foodList.add(p);
+        	plantList.add(p);
         }
 
-        //Each bacteria acts independently (very prototype)
+        //Each bacteria acts independently
         for(Bacteria bac : bacteriaList){
-            bac.act(foodList);
+            bac.act(plantList, bacteriaList);
         }
     }
 
@@ -72,7 +64,6 @@ public class Simulation {
             if(bac.isDead()){
                 iter.remove();
                 bac = null;
-                
 
                 System.out.println("Dead bacteria removed. Num bacteria:"+bacteriaList.size());
             }
@@ -84,7 +75,7 @@ public class Simulation {
     public void removeDeadPlants() {
 
         //We use an iterator since we are removing elements while iterating
-        Iterator<Plant> iter = foodList.iterator();
+        Iterator<Plant> iter = plantList.iterator();
 
         while(iter.hasNext()){
 
@@ -101,11 +92,11 @@ public class Simulation {
     	// We first put the new bacteria into a list and add them afterwards.
     	// That way the new bacteria won't be run in the loop.
     	ArrayList<Bacteria> newBacteria = new ArrayList<Bacteria>();
-    	
+
     	for (Bacteria b : bacteriaList) {
     		// If it meets the reproduction criteria and isn't dead, then reproduce.
     		if (b.getAge() >= Constants.reproductionAge && b.getEnergy() >= Constants.reproductionEnergy && !b.isDead() && !b.isDying()) {
-    			Genetics[] newGens = makeNewGenetics(b.getGen());
+    			Genetics[] newGens = makeNewGenetics(b.getGenetics());
     			newBacteria.add(new Bacteria(newGens[0], b.getXpos()-10, b.getYpos()));
     			newBacteria.add(new Bacteria(newGens[1], b.getXpos()+10, b.getYpos()));
     			
@@ -128,11 +119,11 @@ public class Simulation {
     	Genetics gen2 = new Genetics(oldGen);
     	Random r =  new Random();
     	
-    	// OBS inte säker på att detta blir helt rätt.
-    	// först har vi ett tal mellan 0.0 och 1.0, dra ifrån en halv för -0.5-0.5, multiplicera med 2*0.2 = 0.4 ger mellan -0.2 och 0.2
-    	// rätt?
+    	// OBS inte sï¿½ker pï¿½ att detta blir helt rï¿½tt.
+    	// fï¿½rst har vi ett tal mellan 0.0 och 1.0, dra ifrï¿½n en halv fï¿½r -0.5-0.5, multiplicera med 2*0.2 = 0.4 ger mellan -0.2 och 0.2
+    	// rï¿½tt?
     	float offset = (r.nextFloat()-0.5f)*(Constants.maxAttributeOffset*2);
-    	int attribute = r.nextInt(4); // NOTE: Hårdkodatat. Fyra olika attributes att ändra.
+    	int attribute = r.nextInt(4); // NOTE: Hï¿½rdkodatat. Fyra olika attributes att ï¿½ndra.
     	
     	switch (attribute) {
     	case 0:
@@ -161,8 +152,8 @@ public class Simulation {
         return bacteriaList;
     }
     
-    public ArrayList<Plant> getFoodList(){
-        return foodList;
+    public ArrayList<Plant> getPlantList(){
+        return plantList;
     }
 
     public void incrementTicks(){
