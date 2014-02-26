@@ -16,7 +16,7 @@ public class Bacteria extends SimulationEntity{
         age = 0;
         setDead(false);
         setDying(false);
-        setEnergy(Constants.maxEnergy/2);
+        setEnergy(Constants.maxEnergy / 2);
         gen = genetics;
         spawn();
         System.out.println("New bacteria created with random positions.");
@@ -36,50 +36,79 @@ public class Bacteria extends SimulationEntity{
     }
 
     //How the bacteria acts each tick
-    public void act(ArrayList<Plant> pl){
+    public void act(ArrayList<Plant> plist, ArrayList<Bacteria> baclist){
 
         incrementAge();
 
         Vector movement = new Vector(0, 0);
-        Vector dis;
-        double len;
 
-        if(isDying()) return;
+        if(isDying() || isDead()){
+            return;
+        }
 
-        for(Plant p : pl){
+        for(Plant pl : plist){
 
-            dis = distance(p);
-            
             // If we're next to a plant and it's alive. Eat it!
-            if (dis.getLength() < 5 && this.getEnergy() < (int)(Constants.maxEnergy * 0.9)) {
-            	if (!p.isDead() && p.getEnergy() > 0) {
-            		p.dropEnergy(100);
-            		if (p.getEnergy() <= 0) {
-            			p.setDead(true);
-            		}
-            		addEnergy(Math.min(p.getEnergy(), 100));
-            	}
+            if (this.distance(pl).getLength() < 5 && this.getEnergy() < (int)(Constants.maxEnergy * 0.9)) {
+                eatPlants(pl);
             }
-            
-            len = dis.getLength();
 
-            //We only act on what's in range of vision
-            if(len > 0 && len <= Constants.maxVision){
+            see(this.distance(pl));
 
-                //First we normalize the vector to get the direction
-                dis.normalize();
-
-                //We make sure that vectors further away are less important
-                dis.scale(1 / len);
-
-                //We add the sum of all movements to the movement vector
-                movement.add(dis);
-            }
+            //We add the sum of all movements to the movement vector
+            movement.add(see(this.distance(pl)));
         }
 
         //Normalize the movement vector to get properly scaled end results
         movement.normalize();
 
+        move(movement, baclist);
+    }
+
+
+    private void eatPlants(SimulationEntity pl){
+
+        if (!pl.isDead() && pl.getEnergy() > 0) {
+
+            pl.dropEnergy(100);
+
+            int energy = Math.min(pl.getEnergy(), 100);
+            addEnergy(energy - (int) (energy * getGenetics().getAggression()));
+        }
+    }
+
+    private void eatBacteria(Bacteria bac){
+
+        if (!bac.isDead() && bac.getEnergy() > 0) {
+
+            bac.dropEnergy(100);
+            addEnergy(Math.min(bac.getEnergy(), 100));
+        }
+    }
+
+    private Vector see(Vector dis){
+
+        double len = dis.getLength();
+
+        //We only act on what's in range of vision
+        if(len > 0 && len <= Constants.maxVision){
+
+            //First we normalize the vector to get the direction
+            dis.normalize();
+
+            //TODO Scale according to attraction
+
+            //We make sure that vectors further away are less important
+            dis.scale(1 / len);
+
+            return dis;
+        }
+        else{
+            return new Vector(0, 0);
+        }
+    }
+
+    private void move(Vector movement, ArrayList<Bacteria> baclist){
         //Moves according to the movement vector
         if(movement.getX() > 0.1){
             movement.setX(1);
@@ -95,8 +124,18 @@ public class Bacteria extends SimulationEntity{
             movement.setY(-1);
         }
 
-        setXpos(checkXbounds(getXpos() + (int) movement.getX()));
-        setYpos(checkYbounds(getYpos() + (int) movement.getY()));
+        int xdestination = getXpos() + (int) movement.getX();
+        int ydestination = getYpos() + (int) movement.getY();
+
+        //If there is a bacteria blocking that position, do nothing
+        for(Bacteria bac : baclist){
+            if(bac != this && Math.abs(bac.getXpos() - xdestination) <= 0 && Math.abs(bac.getYpos() - ydestination) <= 0){
+                return;
+            }
+        }
+
+        setXpos(getXpos() + (int) movement.getX());
+        setYpos(getYpos() + (int) movement.getY());
 
         //We will need to have a random initial movement just in case the movement vector is 0,
         //so the bacteria can always continue moving in the last direction
@@ -126,11 +165,25 @@ public class Bacteria extends SimulationEntity{
         dying = b;
     }
 
+    public void dropEnergy(int energy) {
+        if(getEnergy() - energy > 0){
+            setEnergy(getEnergy() - energy);
+
+            if(getEnergy() < (int)(Constants.maxEnergy * 0.2)){
+                setDying(true);
+            }
+        }
+        else{
+            setEnergy(0);
+            setDead(true);
+        }
+    }
+
     public float getHunger(){
         return ((float) getEnergy() / Constants.maxEnergy);
     }
     
-    public Genetics getGen() {
+    public Genetics getGenetics() {
 		return gen;
 	}
 
@@ -155,31 +208,4 @@ public class Bacteria extends SimulationEntity{
         	setDead(true);
         }
     }
-
-    private int checkXbounds(int x){
-
-        if(x < 0){
-            return 0;
-        }
-
-        else if(x >= Constants.WIDTH){
-            return (Constants.WIDTH - 1);
-        }
-
-        else return x;
-    }
-
-    private int checkYbounds(int y){
-
-        if(y < 0){
-            return 0;
-        }
-
-        else if(y >= Constants.HEIGHT){
-            return (Constants.HEIGHT - 1);
-        }
-
-        else return y;
-    }
-
 }

@@ -15,7 +15,7 @@ class MainCanvas extends Canvas{
 
         buffer = new BufferedImage(Constants.WIDTH, Constants.HEIGHT, BufferedImage.TYPE_INT_RGB);
         doubleBuffer = (Graphics2D) buffer.getGraphics(); //this is the double buffer
-        doubleBuffer.setBackground(new Color(30, 30, 30)); //Set the background color to be redrawn each frame
+        doubleBuffer.setBackground(new Color(20, 20, 20)); //Set the background color to be redrawn each frame
 
         systemFont = new Font("Arial", Font.BOLD ,12);
         doubleBuffer.setFont(systemFont);
@@ -27,7 +27,7 @@ class MainCanvas extends Canvas{
         //Clears the picture to the default color
         doubleBuffer.clearRect(0, 0, Constants.WIDTH, Constants.HEIGHT);
 
-        for(Plant p : sim.getFoodList()){
+        for(Plant p : sim.getPlantList()){
             drawEntity(p);
         }
         

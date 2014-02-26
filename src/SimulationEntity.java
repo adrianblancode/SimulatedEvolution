@@ -14,16 +14,36 @@ public abstract class SimulationEntity {
         return xpos;
     }
 
-    public void setXpos(int i){
-        xpos = i;
+    public void setXpos(int x){
+        if(x < 0){
+            xpos = 0;
+        }
+
+        else if(x >= Constants.WIDTH){
+            xpos = Constants.WIDTH - 1;
+        }
+
+        else{
+            xpos = x;
+        }
     }
 
     public int getYpos(){
         return ypos;
     }
 
-    public void setYpos(int i){
-        ypos = i;
+    public void setYpos(int y){
+        if(y < 0){
+            ypos = 0;
+        }
+
+        else if(y >= Constants.HEIGHT){
+            ypos = Constants.HEIGHT - 1;
+        }
+
+        else{
+            ypos = y;
+        }
     }
 
     public void setDead(boolean d){
@@ -56,11 +76,12 @@ public abstract class SimulationEntity {
 	}
 	
 	public void dropEnergy(int energy) {
-        if(getEnergy() - energy >= 0){
+        if(getEnergy() - energy > 0){
 		    setEnergy(getEnergy() - energy);
         }
         else{
             setEnergy(0);
+            setDead(true);
         }
 	}
 
