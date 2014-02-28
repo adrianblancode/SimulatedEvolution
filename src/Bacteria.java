@@ -40,12 +40,24 @@ public class Bacteria extends SimulationEntity{
 
         incrementAge();
 
-        Vector movement = new Vector(0, 0);
-
         if(isDying() || isDead()){
             return;
         }
+        
+        Vector movement = new Vector(0, 0);
 
+        for(Bacteria b : baclist){
+
+            // If we're next to a dying bacteria, eat it!
+            if (this.distance(b).getLength() < 5 && this.getEnergy() < (int)(Constants.maxEnergy * 0.9)) {
+                eatBacteria(b);
+            }
+        	// TODO: Implementera PvP här!
+
+            //We add the sum of all movements to the movement vector
+            movement.add(see(this.distance(b), b));
+        }
+        
         for(Plant pl : plist){
 
             // If we're next to a plant and it's alive. Eat it!
@@ -54,8 +66,9 @@ public class Bacteria extends SimulationEntity{
             }
 
             //We add the sum of all movements to the movement vector
-            movement.add(see(this.distance(pl)));
+            movement.add(see(this.distance(pl), pl));
         }
+        
 
         //Normalize the movement vector to get properly scaled end results
         movement.normalize();
@@ -76,19 +89,21 @@ public class Bacteria extends SimulationEntity{
     }
 
     private void eatBacteria(Bacteria bac){
+    	int e = bac.getEnergy();
+    	
+        if (!bac.isDead() && e > 0) {
 
-        if (!bac.isDead() && bac.getEnergy() > 0) {
+            if(bac.isDying() || (this.getGenetics().getAggression() - bac.getGenetics().getAggression()) > 0.2 * getHunger()){ //Scale by hunger later
+                bac.dropEnergy(e);
+                bac.setDead(true);
 
-            if(bac.isDying() || (this.getGenetics().getAggression() - bac.getGenetics().getAggression() > 0.5)){ //Scale by hunger later
-                bac.dropEnergy(100);
-
-                int energy = Math.min(bac.getEnergy(), 100);
+                int energy = e;
                 addEnergy(energy + (int) (energy * getGenetics().getAggression()));
             }
         }
     }
 
-    private Vector see(Vector dis){
+    private Vector see(Vector dis, SimulationEntity otherObject){
 
         double len = dis.getLength();
 
@@ -99,6 +114,18 @@ public class Bacteria extends SimulationEntity{
             dis.normalize();
 
             //TODO Scale according to attraction
+            
+            
+            if (otherObject.isPlant() && getGenetics().getAggression() < 0.2) {
+            	dis.scale(gen.getPlantAttraction());
+            } else if (otherObject.isBacteria()) {
+            	if (!otherObject.isDying()) {
+            		dis.scale(gen.getCarnivoreAttraction() * (0.5 + otherObject.getGenetics().getAggression() / 2));
+                	dis.scale(gen.getHerbivoreAttraction() * (0.5 - otherObject.getGenetics().getAggression() / 2));
+            	} else {
+            		dis.scale(gen.getDyingAttraction() * (0.5 + otherObject.getGenetics().getAggression() / 2));
+            	}
+            }
 
             //We make sure that vectors further away are less important
             dis.scale(1 / len);
@@ -110,7 +137,7 @@ public class Bacteria extends SimulationEntity{
         }
     }
 
-    private void move(Vector movement, ArrayList<Bacteria> baclist){
+	private void move(Vector movement, ArrayList<Bacteria> baclist){
         //Moves according to the movement vector
         if(movement.getX() > 0.1){
             movement.setX(1);
@@ -205,6 +232,11 @@ public class Bacteria extends SimulationEntity{
             setDying(true);
         }
         
+        if (age >= Constants.absoluteMaxAge) {
+        	setDead(true);
+        	setEnergy(0);
+        }
+        
         if(!isDying()){
             dropEnergy(1);
         }
@@ -212,5 +244,9 @@ public class Bacteria extends SimulationEntity{
         if (getEnergy() == 0) {
         	setDead(true);
         }
+    }
+    
+    public boolean isBacteria() {
+    	return true;
     }
 }

@@ -1,3 +1,5 @@
+import java.util.Random;
+
 /**
  * Created by Adrian on 2014-02-24.
  */
@@ -6,22 +8,28 @@ public class Genetics {
     private float aggression; //herbivore vs carnivore
     //private float speed; implement later
 
-    private float foodAttraction;
+    private float plantAttraction;
     private float herbivoreAttraction;
     private float carnivoreAttraction;
+    private float dyingAttraction;
 
     //Creates a gene with pre-defined values.
-    public Genetics(){
-        setAggression(0f);
-        setFoodAttraction(0.5f);
-        setHerbivoreAttraction(0f);
+    public Genetics() {
+    	Random r = new Random();
+        setAggression((float) ((r.nextFloat()*2)-1));
+        setPlantAttraction(getAggression()*(-1));
+        setHerbivoreAttraction(getAggression());
         setCarnivoreAttraction(0f);
+        
+        if (getAggression() < 0) {
+            setCarnivoreAttraction(-1f);
+        }
     }
     
     // Creates a copy of some existing genetics.
     public Genetics(Genetics oldGen){
         setAggression(oldGen.getAggression());
-        setFoodAttraction(oldGen.getFoodAttraction());
+        setPlantAttraction(oldGen.getPlantAttraction());
         setHerbivoreAttraction(oldGen.getHerbivoreAttraction());
         setCarnivoreAttraction(oldGen.getCarnivoreAttraction());
     }
@@ -36,13 +44,13 @@ public class Genetics {
         }
     }
 
-    public float getFoodAttraction() {
-        return foodAttraction;
+    public float getPlantAttraction() {
+        return plantAttraction;
     }
 
-    public void setFoodAttraction(float foodAttraction) {
-        if(foodAttraction >= -1.0 && foodAttraction <= 1.0){
-            this.foodAttraction = foodAttraction;
+    public void setPlantAttraction(float foodAttraction) {
+        if(foodAttraction >= 0 && foodAttraction <= 1.0){
+            this.plantAttraction = foodAttraction;
         }
     }
 
@@ -65,4 +73,15 @@ public class Genetics {
             this.carnivoreAttraction = carnivoreAttraction;
         }
     }
+
+	public float getDyingAttraction() {
+		return dyingAttraction;
+	}
+
+	public void setDyingAttraction(float dyingAttraction) {
+        if(dyingAttraction >= 0 && dyingAttraction <= 1.0){
+        	this.dyingAttraction = dyingAttraction;
+        }
+	}
+    
 }
