@@ -95,4 +95,17 @@ public abstract class SimulationEntity {
     public Color getColor(){
         return new Color(255, 255, 255);
     }
+    
+    public boolean isPlant() {
+    	return false;
+    }
+    public boolean isBacteria() {
+    	return false;
+    }
+    public Genetics getGenetics() {
+    	return null;
+    }
+    public boolean isDying() {
+    	return false;
+    }
 }

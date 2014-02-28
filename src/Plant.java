@@ -27,4 +27,8 @@ public class Plant extends SimulationEntity {
 		return color;
 	}
 	
+	public boolean isPlant() {
+		return true;
+	}
+	
 }
