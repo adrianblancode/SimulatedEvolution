@@ -53,8 +53,6 @@ public class Bacteria extends SimulationEntity{
                 eatPlants(pl);
             }
 
-            see(this.distance(pl));
-
             //We add the sum of all movements to the movement vector
             movement.add(see(this.distance(pl)));
         }
@@ -81,8 +79,12 @@ public class Bacteria extends SimulationEntity{
 
         if (!bac.isDead() && bac.getEnergy() > 0) {
 
-            bac.dropEnergy(100);
-            addEnergy(Math.min(bac.getEnergy(), 100));
+            if(bac.isDying() || (this.getGenetics().getAggression() - bac.getGenetics().getAggression() > 0.5)){ //Scale by hunger later
+                bac.dropEnergy(100);
+
+                int energy = Math.min(bac.getEnergy(), 100);
+                addEnergy(energy + (int) (energy * getGenetics().getAggression()));
+            }
         }
     }
 
@@ -203,7 +205,10 @@ public class Bacteria extends SimulationEntity{
             setDying(true);
         }
         
-        dropEnergy(1);
+        if(!isDying()){
+            dropEnergy(1);
+        }
+
         if (getEnergy() == 0) {
         	setDead(true);
         }
