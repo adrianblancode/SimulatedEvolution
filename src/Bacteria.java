@@ -128,7 +128,7 @@ public class Bacteria extends SimulationEntity{
             }
 
             //We make sure that vectors further away are less important
-            dis.scale(1 / len);
+            dis.scale(1/Math.pow(len,0.8));
 
             return dis;
         }
@@ -237,9 +237,9 @@ public class Bacteria extends SimulationEntity{
         	setEnergy(0);
         }
         
-        if(!isDying()){
+        //if(!isDying()){
             dropEnergy(1);
-        }
+        //}
 
         if (getEnergy() == 0) {
         	setDead(true);

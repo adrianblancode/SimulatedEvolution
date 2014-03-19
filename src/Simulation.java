@@ -18,9 +18,9 @@ public class Simulation {
     public void spawnCarnivore() {
         Genetics g = new Genetics();
         g.setAggression(1.0f);
-        g.setHerbivoreAttraction(1.0f);
+        g.setHerbivoreAttraction(0.0f);
         g.setCarnivoreAttraction(0.0f);
-        g.setDyingAttraction(0.5f);
+        g.setDyingAttraction(0.0f);
         g.setPlantAttraction(0.0f);
 
         Bacteria b = new Bacteria(g);
@@ -34,7 +34,7 @@ public class Simulation {
         g.setHerbivoreAttraction(0.0f);
         g.setCarnivoreAttraction(-1.0f);
         g.setDyingAttraction(0.0f);
-        g.setPlantAttraction(0.8f);
+        g.setPlantAttraction(0.0f);
 
         Bacteria b = new Bacteria(g);
         bacteriaList.add(b);

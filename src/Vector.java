@@ -43,9 +43,11 @@ public class Vector{
     }
 
     public void normalize(){
-        if(getLength() != 0){
-            x = x / getLength();
-            y = y / getLength();
+    	double len = getLength();
+    	
+        if(len != 0){
+            x = x / len;
+            y = y / len;
         }
     }
 
