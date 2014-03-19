@@ -116,14 +116,19 @@ public class Bacteria extends SimulationEntity{
             //TODO Scale according to attraction
             
             
-            if (otherObject.isPlant() && getGenetics().getAggression() < 0.2) {
+            if (otherObject.isPlant()) {
             	dis.scale(gen.getPlantAttraction());
-            } else if (otherObject.isBacteria()) {
+            }
+            else if (otherObject.isBacteria()) {
             	if (!otherObject.isDying()) {
-            		dis.scale(gen.getCarnivoreAttraction() * (0.5 + otherObject.getGenetics().getAggression() / 2));
-                	dis.scale(gen.getHerbivoreAttraction() * (0.5 - otherObject.getGenetics().getAggression() / 2));
+            		//dis.scale(gen.getCarnivoreAttraction() * (0.5 + otherObject.getGenetics().getAggression() / 2));
+            		if (otherObject.getGenetics().getAggression() < 0) {
+            			dis.scale(gen.getHerbivoreAttraction());
+            		} else {
+            			dis.scale(gen.getCarnivoreAttraction());
+            		}
             	} else {
-            		dis.scale(gen.getDyingAttraction() * (0.5 + otherObject.getGenetics().getAggression() / 2));
+            		dis.scale(gen.getDyingAttraction());
             	}
             }
 
