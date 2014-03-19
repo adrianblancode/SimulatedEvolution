@@ -39,8 +39,15 @@ public class Start {
         float res = 0;
         
         // Runs statup on the simulation.
-        sim.start(250);
+        sim.start(30);
+        for (int i = 0; i < 40; ++i) {
+        	sim.spawnHerbivore();
+        }
 
+        for (int i = 0; i < 15; ++i) {
+        	sim.spawnCarnivore();
+        }
+        
         //Simulation loop
         while(true){
 

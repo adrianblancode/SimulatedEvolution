@@ -14,11 +14,37 @@ public class Simulation {
         ticks = 0;
     }
     
+    // Creates a carnivore and spawns it on a random position
+    public void spawnCarnivore() {
+        Genetics g = new Genetics();
+        g.setAggression(1.0f);
+        g.setHerbivoreAttraction(1.0f);
+        g.setCarnivoreAttraction(0.0f);
+        g.setDyingAttraction(0.5f);
+        g.setPlantAttraction(0.0f);
+
+        Bacteria b = new Bacteria(g);
+        bacteriaList.add(b);
+    }
+
+    // Creates a herbivore and spawns it on a random position
+    public void spawnHerbivore() {
+        Genetics g = new Genetics();
+        g.setAggression(-1.0f);
+        g.setHerbivoreAttraction(0.0f);
+        g.setCarnivoreAttraction(-1.0f);
+        g.setDyingAttraction(0.0f);
+        g.setPlantAttraction(0.8f);
+
+        Bacteria b = new Bacteria(g);
+        bacteriaList.add(b);
+    }
+    
     public void start(int numBacteria){
     	for (int i = 0; i < numBacteria; ++i) {
             //Adds a new bacteria to the simulation
-            Bacteria b = new Bacteria();
-            bacteriaList.add(b);
+           // Bacteria b = new Bacteria();
+          //  bacteriaList.add(b);
             
             // Add a new plant to the simulation
             Plant p = new Plant();
@@ -40,7 +66,7 @@ public class Simulation {
 
         // Add a new plant to the simulation
         Random r = new Random();
-        if (r.nextInt(2) == 0) { // Fulkodat, g�r f�rre plants.
+        if (r.nextInt(10) == 0) { // Fulkodat, g�r f�rre plants.
         	Plant p = new Plant();
         	plantList.add(p);
         }
