@@ -18,8 +18,8 @@ public class Genetics {
     	Random r = new Random();
         setAggression((float) ((r.nextFloat()*2)-1));
         setPlantAttraction(getAggression()*(-1));
-        setHerbivoreAttraction(getAggression());
-        setCarnivoreAttraction(0f);
+        setHerbivoreAttraction(0f);
+        setCarnivoreAttraction((getAggression()>0) ? 0 : getAggression()*(-1));
         
         if (getAggression() < 0) {
             setCarnivoreAttraction(-1f);
