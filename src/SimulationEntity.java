@@ -16,11 +16,11 @@ public abstract class SimulationEntity {
 
     public void setXpos(int x){
         if(x < 0){
-            xpos = 0;
+            xpos = Constants.WIDTH + x;
         }
 
         else if(x >= Constants.WIDTH){
-            xpos = Constants.WIDTH - 1;
+            xpos = x - Constants.WIDTH;
         }
 
         else{
@@ -34,11 +34,11 @@ public abstract class SimulationEntity {
 
     public void setYpos(int y){
         if(y < 0){
-            ypos = 0;
+            ypos = Constants.HEIGHT + y;
         }
 
         else if(y >= Constants.HEIGHT){
-            ypos = Constants.HEIGHT - 1;
+            ypos = y - Constants.HEIGHT;
         }
 
         else{
@@ -86,8 +86,28 @@ public abstract class SimulationEntity {
 	}
 
     public Vector distance(SimulationEntity se){
-        int xd = se.getXpos() - getXpos();
-        int yd = se.getYpos() - getYpos();
+        int xd1 = se.getXpos() - getXpos(); 
+        int xd2 = (se.getXpos() - Constants.WIDTH) - getXpos();
+        
+        int yd1 = se.getYpos() - getYpos();
+        int yd2 = (se.getYpos() - Constants.HEIGHT) - getYpos();
+        
+        int xd = 0;
+        int yd = 0;
+        
+        if (Math.abs(xd1) < Math.abs(xd2)) {
+        	xd = xd1;
+        } else {
+        	xd = xd2;
+        }     
+        
+        if (Math.abs(yd1) < Math.abs(yd2)) {
+        	yd = yd1;
+        } else {
+        	yd = yd2;
+        }
+        	
+        
         return new Vector(xd, yd);
     }
 
