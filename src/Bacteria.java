@@ -8,6 +8,8 @@ public class Bacteria extends SimulationEntity{
     private boolean dying;
     private Genetics gen;
 
+    private Vector lastMovement;
+
     public Bacteria(){
         this(new Genetics());
     }
@@ -52,7 +54,7 @@ public class Bacteria extends SimulationEntity{
             if (this.distance(b).getLength() < 5 && this.getEnergy() < (int)(Constants.maxEnergy * 0.9)) {
                 eatBacteria(b);
             }
-        	// TODO: Implementera PvP här!
+        	// TODO: Implementera PvP hï¿½r!
 
             //We add the sum of all movements to the movement vector
             movement.add(see(this.distance(b), b));
@@ -113,19 +115,16 @@ public class Bacteria extends SimulationEntity{
             //First we normalize the vector to get the direction
             dis.normalize();
 
-            //TODO Scale according to attraction
-            
-            
             if (otherObject.isPlant()) {
             	dis.scale(gen.getPlantAttraction());
             }
             else if (otherObject.isBacteria()) {
             	if (!otherObject.isDying()) {
-            		//dis.scale(gen.getCarnivoreAttraction() * (0.5 + otherObject.getGenetics().getAggression() / 2));
+                    //TODO fixa omnivores
             		if (otherObject.getGenetics().getAggression() < 0) {
-            			dis.scale(gen.getHerbivoreAttraction());
+            			dis.scale(gen.getHerbivoreAttraction() * -otherObject.getGenetics().getAggression());
             		} else {
-            			dis.scale(gen.getCarnivoreAttraction());
+            			dis.scale(gen.getCarnivoreAttraction() * otherObject.getGenetics().getAggression());
             		}
             	} else {
             		dis.scale(gen.getDyingAttraction());
@@ -133,7 +132,7 @@ public class Bacteria extends SimulationEntity{
             }
 
             //We make sure that vectors further away are less important
-            dis.scale(1/Math.pow(len,0.8));
+            dis.scale(1 / Math.pow(len,0.8));
 
             return dis;
         }
@@ -158,8 +157,19 @@ public class Bacteria extends SimulationEntity{
             movement.setY(-1);
         }
 
-        int xdestination = getXpos() + (int) movement.getX();
-        int ydestination = getYpos() + (int) movement.getY();
+        int xdestination = 0;
+        int ydestination = 0;
+
+        if(movement.isNull()){
+             xdestination = getXpos() + (int) lastMovement.getX();
+             ydestination = getYpos() + (int) lastMovement.getY();
+        }
+        else {
+            xdestination = getXpos() + (int) movement.getX();
+            ydestination = getYpos() + (int) movement.getY();
+
+            lastMovement = movement;
+        }
 
         //If there is a bacteria blocking that position, do nothing
         for(Bacteria bac : baclist){
@@ -203,7 +213,7 @@ public class Bacteria extends SimulationEntity{
         if(getEnergy() - energy > 0){
             setEnergy(getEnergy() - energy);
 
-            if(getEnergy() < (int)(Constants.maxEnergy * 0.2)){
+            if(getEnergy() < (int)(Constants.maxEnergy * 0.25)){
                 setDying(true);
             }
         }
@@ -242,9 +252,12 @@ public class Bacteria extends SimulationEntity{
         	setEnergy(0);
         }
         
-        //if(!isDying()){
+        if(isDying()){
             dropEnergy(1);
-        //}
+        }
+        else{
+            dropEnergy(2);
+        }
 
         if (getEnergy() == 0) {
         	setDead(true);

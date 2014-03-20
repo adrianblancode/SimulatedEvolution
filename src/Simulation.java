@@ -20,7 +20,7 @@ public class Simulation {
         g.setAggression(1.0f);
         g.setHerbivoreAttraction(0.7f);
         g.setCarnivoreAttraction(0.0f);
-        g.setDyingAttraction(0.3f);
+        g.setDyingAttraction(0.5f);
         g.setPlantAttraction(0.0f);
 
         Bacteria b = new Bacteria(g);

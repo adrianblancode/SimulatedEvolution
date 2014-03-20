@@ -57,4 +57,13 @@ public class Vector{
         x = x * f;
         y = y * f;
     }
+
+    public boolean isNull(){
+        if(Math.abs(x) < 0.001 && Math.abs(y) < 0.001){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 }

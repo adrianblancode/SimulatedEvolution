@@ -1,13 +1,10 @@
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.KeyStroke;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 
@@ -34,6 +31,7 @@ public class Start {
         canvas = new MainCanvas();
         canvas.setSimulation(sim);
         myFrame.add("Center", canvas);
+        myFrame.addKeyListener(new MKeyListener());
 
         int sleep = 0;
         float res = 0;
@@ -75,7 +73,6 @@ public class Start {
 
             res = 1000 / ((time/1000000) + sleep);
         }
-
     }
 
     //Enables the user to exit the program by pressing escape
@@ -99,7 +96,24 @@ public class Start {
         KeyStroke escapeKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false);
         myFrame.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeKeyStroke, "ESCAPE");
         myFrame.getRootPane().getActionMap().put("ESCAPE", escapeAction);
-
     }
+}
 
+class MKeyListener extends KeyAdapter {
+
+    @Override
+    public void keyPressed(KeyEvent event) {
+
+        if (event.getKeyCode() == KeyEvent.VK_LEFT) {
+            System.out.println("Left");
+        }
+
+        if (event.getKeyCode() == KeyEvent.VK_RIGHT){
+            System.out.println("Right");
+        }
+
+        if (event.getKeyCode() == KeyEvent.VK_HOME) {
+            System.out.println("Key codes: " + event.getKeyCode());
+        }
+    }
 }
