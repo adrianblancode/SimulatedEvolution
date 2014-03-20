@@ -18,9 +18,9 @@ public class Simulation {
     public void spawnCarnivore() {
         Genetics g = new Genetics();
         g.setAggression(1.0f);
-        g.setHerbivoreAttraction(0.7f);
+        g.setHerbivoreAttraction(0.1f);
         g.setCarnivoreAttraction(0.0f);
-        g.setDyingAttraction(0.5f);
+        g.setDyingAttraction(0.99f);
         g.setPlantAttraction(0.0f);
 
         Bacteria b = new Bacteria(g);
@@ -40,8 +40,21 @@ public class Simulation {
         bacteriaList.add(b);
     }
     
-    public void start(int numBacteria){
-    	for (int i = 0; i < numBacteria; ++i) {
+    public void spawnNeutral() {
+    	Random r = new Random();
+        Genetics g = new Genetics();
+        g.setAggression((float) (0.1-r.nextFloat()*0.2));
+        g.setHerbivoreAttraction((float) (0.1-r.nextFloat()*0.2));
+        g.setCarnivoreAttraction((float) (0.1-r.nextFloat()*0.2));
+        g.setDyingAttraction((float) (0.1-r.nextFloat()*0.2));
+        g.setPlantAttraction((float) (0.2-r.nextFloat()*0.2));
+
+        Bacteria b = new Bacteria(g);
+        bacteriaList.add(b);
+    }
+    
+    public void start(int numPlants){
+    	for (int i = 0; i < numPlants; ++i) {
             //Adds a new bacteria to the simulation
            // Bacteria b = new Bacteria();
           //  bacteriaList.add(b);

@@ -7,6 +7,7 @@ public class Bacteria extends SimulationEntity{
     private int age;
     private boolean dying;
     private Genetics gen;
+    private Random rand;
 
     private Vector lastMovement;
 
@@ -15,16 +16,18 @@ public class Bacteria extends SimulationEntity{
     }
     
     public Bacteria(Genetics genetics){
+    	rand = new Random();
         age = 0;
         setDead(false);
         setDying(false);
-        setEnergy(Constants.maxEnergy / 2);
+        setEnergy(Constants.maxEnergy/2);
         gen = genetics;
         spawn();
         System.out.println("New bacteria created with random positions.");
     }
     
     public Bacteria(Genetics genetics, int xpos, int ypos){
+    	rand = new Random();
         age = 0;
         setDead(false);
         setDying(false);
@@ -44,6 +47,11 @@ public class Bacteria extends SimulationEntity{
 
         if(isDying() || isDead()){
             return;
+        }
+        double bonus = 0;
+        bonus = gen.getAggression()*0.01;
+        if ((0.5*(1-getHunger()))+0.5+bonus < rand.nextDouble()) {
+        	return;
         }
         
         Vector movement = new Vector(0, 0);
@@ -83,24 +91,28 @@ public class Bacteria extends SimulationEntity{
 
         if (!pl.isDead() && pl.getEnergy() > 0) {
 
-            pl.dropEnergy(100);
-
-            int energy = Math.min(pl.getEnergy(), 100);
-            addEnergy(energy - (int) (energy * getGenetics().getAggression()));
+            int energy = Math.min(pl.getEnergy(), 10);
+            pl.dropEnergy(energy);
+            addEnergy(Math.max(energy - (int) (energy * (getGenetics().getAggression()+0.5)), 0));
         }
     }
 
     private void eatBacteria(Bacteria bac){
+    	if (getGenetics().getAggression() < -0.5) {
+    		return;
+    	}
     	int e = bac.getEnergy();
     	
         if (!bac.isDead() && e > 0) {
 
-            if(bac.isDying() || (this.getGenetics().getAggression() - bac.getGenetics().getAggression()) > 0.2 * getHunger()){ //Scale by hunger later
-                bac.dropEnergy(e);
-                bac.setDead(true);
+            if(bac.isDying() || (this.getGenetics().getAggression() - bac.getGenetics().getAggression()) > 0.5 * getHunger()){ //Scale by hunger later
+            	int eatenEnergy = Math.min(e, 50);
+                bac.dropEnergy(eatenEnergy);
+                if (e-eatenEnergy == 0) {
+                	bac.setDead(true);
+                }
 
-                int energy = e;
-                addEnergy(energy + (int) (energy * getGenetics().getAggression()));
+                addEnergy(eatenEnergy + (int) (eatenEnergy * getGenetics().getAggression()));
             }
         }
     }
@@ -120,6 +132,7 @@ public class Bacteria extends SimulationEntity{
             }
             else if (otherObject.isBacteria()) {
             	if (!otherObject.isDying()) {
+
                     //TODO fixa omnivores
             		if (otherObject.getGenetics().getAggression() < 0) {
             			dis.scale(gen.getHerbivoreAttraction() * -otherObject.getGenetics().getAggression());
@@ -127,7 +140,7 @@ public class Bacteria extends SimulationEntity{
             			dis.scale(gen.getCarnivoreAttraction() * otherObject.getGenetics().getAggression());
             		}
             	} else {
-            		dis.scale(gen.getDyingAttraction());
+            		dis.scale(gen.getDyingAttraction()*6);
             	}
             }
 
@@ -186,10 +199,6 @@ public class Bacteria extends SimulationEntity{
     }
 
     private void spawn(){
-        //lol sämst, we are creating new randoms too much
-        Random rand = new Random();
-
-        //OBS hårdkodat
         int value = rand.nextInt(Constants.WIDTH);
         setXpos(value);
 
@@ -224,7 +233,7 @@ public class Bacteria extends SimulationEntity{
     }
 
     public float getHunger(){
-        return ((float) getEnergy() / Constants.maxEnergy);
+        return (float)1-((float)getEnergy() / Constants.maxEnergy);
     }
     
     public Genetics getGenetics() {
@@ -233,9 +242,9 @@ public class Bacteria extends SimulationEntity{
 
 	public Color getColor() {
         //Background is (30, 30 , 30), with 50 it's still visible while almost dead
-        int red = 50 + (int) ((100 + 100 * gen.getAggression()) * getHunger());
-        int blue = 50 + (int)((100 - 100 * gen.getAggression()) * getHunger());
-        int green = 50 + (int) (getHunger());
+        int red = 50 + (int) ((100 + 100 * gen.getAggression()) * (1-getHunger()));
+        int blue = 50 + (int)((100 - 100 * gen.getAggression()) * (1-getHunger()));
+        int green = 50 + (int) (1-getHunger());
         return new Color(red, green, blue);
     }
 
