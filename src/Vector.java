@@ -59,7 +59,7 @@ public class Vector{
     }
 
     public boolean isNull(){
-        if(Math.abs(x) < 0.001 && Math.abs(y) < 0.001){
+        if(Math.abs(x) < 0.0001 && Math.abs(y) < 0.0001){
             return true;
         }
         else{

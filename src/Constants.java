@@ -3,12 +3,13 @@
  */
 public final class Constants {
 
-    public static int WIDTH = 1200;
-    public static int HEIGHT = 600;
+    public static int WIDTH = 1700;
+    public static int HEIGHT = 1000;
     public static int maxAge = 10000;
-    public static int maxVision = 300;
+    public static int maxVision = 200;
     public static int maxEnergy = 10000;
     public static int absoluteMaxAge = (int)(maxAge*1.2);
+    public static int plantEnergy = 1000;
     
     public static int reproductionAge = 500;
     public static int reproductionEnergy = (int) (maxEnergy * 0.9);

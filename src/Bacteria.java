@@ -17,22 +17,17 @@ public class Bacteria extends SimulationEntity{
     
     public Bacteria(Genetics genetics){
     	rand = new Random();
+    	lastMovement = new Vector(rand.nextInt(3) - 1, rand.nextInt(3) - 1);
         age = 0;
         setDead(false);
         setDying(false);
-        setEnergy(Constants.maxEnergy/2);
+        setEnergy((int)(Constants.maxEnergy * 0.5));
         gen = genetics;
         spawn();
-        System.out.println("New bacteria created with random positions.");
     }
     
     public Bacteria(Genetics genetics, int xpos, int ypos){
-    	rand = new Random();
-        age = 0;
-        setDead(false);
-        setDying(false);
-        setEnergy(Constants.maxEnergy/2);
-        gen = genetics;
+    	this(genetics);
 
         setXpos(xpos);
         setYpos(ypos);
@@ -49,7 +44,7 @@ public class Bacteria extends SimulationEntity{
             return;
         }
         double bonus = 0;
-        bonus = gen.getAggression()*0.01;
+        bonus = gen.getAggression()*(-0.10);
         if ((0.5*(1-getHunger()))+0.5+bonus < rand.nextDouble()) {
         	return;
         }
@@ -105,10 +100,10 @@ public class Bacteria extends SimulationEntity{
     	
         if (!bac.isDead() && e > 0) {
 
-            if(bac.isDying() || (this.getGenetics().getAggression() - bac.getGenetics().getAggression()) > 0.5 * getHunger()){ //Scale by hunger later
+            if(bac.isDying() || (this.getGenetics().getAggression() - bac.getGenetics().getAggression()) > 1.0 * getHunger()){ //Scale by hunger later
             	int eatenEnergy = Math.min(e, 50);
                 bac.dropEnergy(eatenEnergy);
-                if (e-eatenEnergy == 0) {
+                if (e - eatenEnergy <= 0) {
                 	bac.setDead(true);
                 }
 
@@ -132,7 +127,6 @@ public class Bacteria extends SimulationEntity{
             }
             else if (otherObject.isBacteria()) {
             	if (!otherObject.isDying()) {
-
                     //TODO fixa omnivores
             		if (otherObject.getGenetics().getAggression() < 0) {
             			dis.scale(gen.getHerbivoreAttraction() * -otherObject.getGenetics().getAggression());
@@ -140,12 +134,12 @@ public class Bacteria extends SimulationEntity{
             			dis.scale(gen.getCarnivoreAttraction() * otherObject.getGenetics().getAggression());
             		}
             	} else {
-            		dis.scale(gen.getDyingAttraction()*6);
+            		dis.scale(gen.getDyingAttraction());
             	}
             }
 
             //We make sure that vectors further away are less important
-            dis.scale(1 / Math.pow(len,0.8));
+            dis.scale(1 / Math.pow(len, 0.8));
 
             return dis;
         }
@@ -191,8 +185,8 @@ public class Bacteria extends SimulationEntity{
             }
         }
 
-        setXpos(getXpos() + (int) movement.getX());
-        setYpos(getYpos() + (int) movement.getY());
+        setXpos(xdestination);
+        setYpos(ydestination);
 
         //We will need to have a random initial movement just in case the movement vector is 0,
         //so the bacteria can always continue moving in the last direction

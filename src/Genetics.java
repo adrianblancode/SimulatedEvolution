@@ -32,6 +32,8 @@ public class Genetics {
         setPlantAttraction(oldGen.getPlantAttraction());
         setHerbivoreAttraction(oldGen.getHerbivoreAttraction());
         setCarnivoreAttraction(oldGen.getCarnivoreAttraction());
+        setDyingAttraction(oldGen.getDyingAttraction());
+        System.out.println("New bacteria! Aggression: "+oldGen.getAggression());
     }
 
     public float getAggression() {
@@ -39,19 +41,15 @@ public class Genetics {
     }
 
     public void setAggression(float aggression) {
-        if(aggression >= -1.0 && aggression <= 1.0){
-            this.aggression = aggression;
-        }
+    	this.aggression = boundaryCheck(aggression, -1.0f, 1.0f);
     }
 
     public float getPlantAttraction() {
         return plantAttraction;
     }
 
-    public void setPlantAttraction(float foodAttraction) {
-        if(foodAttraction >= 0 && foodAttraction <= 1.0){
-            this.plantAttraction = foodAttraction;
-        }
+    public void setPlantAttraction(float plantAttraction) {
+    	this.plantAttraction = boundaryCheck(plantAttraction, 0.0f, 1.0f);
     }
 
     public float getHerbivoreAttraction() {
@@ -59,9 +57,7 @@ public class Genetics {
     }
 
     public void setHerbivoreAttraction(float herbivoreAttraction) {
-        if(herbivoreAttraction >= -1.0 && herbivoreAttraction <= 1.0){
-            this.herbivoreAttraction = herbivoreAttraction;
-        }
+    	this.herbivoreAttraction = boundaryCheck(herbivoreAttraction, -1.0f, 1.0f);
     }
 
     public float getCarnivoreAttraction() {
@@ -69,9 +65,7 @@ public class Genetics {
     }
 
     public void setCarnivoreAttraction(float carnivoreAttraction) {
-        if(carnivoreAttraction >= -1.0 && carnivoreAttraction <= 1.0){
-            this.carnivoreAttraction = carnivoreAttraction;
-        }
+           this.carnivoreAttraction = boundaryCheck(carnivoreAttraction, -1.0f, 1.0f);
     }
 
 	public float getDyingAttraction() {
@@ -79,9 +73,19 @@ public class Genetics {
 	}
 
 	public void setDyingAttraction(float dyingAttraction) {
-        if(dyingAttraction >= 0 && dyingAttraction <= 1.0){
-        	this.dyingAttraction = dyingAttraction;
-        }
+        this.dyingAttraction = boundaryCheck(dyingAttraction, 0.0f, 1.0f);
+	}
+	
+	private float boundaryCheck(float value, float lowerBound, float upperBound) {
+		if (value > upperBound) {
+			return upperBound;
+		}
+		else if (value < lowerBound) {
+			return lowerBound;
+		}
+		else {
+			return value;
+		}
 	}
     
 }
