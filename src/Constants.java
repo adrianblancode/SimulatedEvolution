@@ -3,8 +3,8 @@
  */
 public final class Constants {
 
-    public static int WIDTH = 1700;
-    public static int HEIGHT = 1000;
+    public static int WIDTH = 1600;
+    public static int HEIGHT = 900;
     public static int maxAge = 10000;
     public static int maxVision = 200;
     public static int maxEnergy = 10000;

@@ -86,7 +86,7 @@ public class Simulation {
 
         // Add a new plant to the simulation
         Random r = new Random();
-        if (r.nextInt(10) == 0) { // Fulkodat, g�r f�rre plants.
+        if (r.nextDouble() < 0.15) {
         	Plant p = new Plant();
         	plantList.add(p);
         }

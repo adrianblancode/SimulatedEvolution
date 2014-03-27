@@ -88,7 +88,7 @@ public class Bacteria extends SimulationEntity{
 
             int energy = Math.min(pl.getEnergy(), 10);
             pl.dropEnergy(energy);
-            addEnergy(Math.max(energy - (int) (energy * (getGenetics().getAggression()+0.5)), 0));
+            addEnergy(energy - (int) (energy * (getGenetics().getAggression()+0.5)));
         }
     }
 
