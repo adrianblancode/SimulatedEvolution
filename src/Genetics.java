@@ -12,7 +12,8 @@ public class Genetics {
     private float herbivoreAttraction;
     private float carnivoreAttraction;
     private float dyingAttraction;
-
+    private float omnivoreAttraction;
+    
     //Creates a gene with pre-defined values.
     public Genetics() {
     	Random r = new Random();
@@ -33,6 +34,7 @@ public class Genetics {
         setHerbivoreAttraction(oldGen.getHerbivoreAttraction());
         setCarnivoreAttraction(oldGen.getCarnivoreAttraction());
         setDyingAttraction(oldGen.getDyingAttraction());
+        setOmnivoreAttraction(oldGen.getOmnivoreAttraction());
         System.out.println("New bacteria! Aggression: "+oldGen.getAggression());
     }
 
@@ -49,7 +51,7 @@ public class Genetics {
     }
 
     public void setPlantAttraction(float plantAttraction) {
-    	this.plantAttraction = boundaryCheck(plantAttraction, 0.0f, 1.0f);
+    	this.plantAttraction = boundaryCheck(plantAttraction, -0.2f, 1.0f);
     }
 
     public float getHerbivoreAttraction() {
@@ -66,6 +68,14 @@ public class Genetics {
 
     public void setCarnivoreAttraction(float carnivoreAttraction) {
            this.carnivoreAttraction = boundaryCheck(carnivoreAttraction, -1.0f, 1.0f);
+    }
+    
+    public float getOmnivoreAttraction() {
+        return omnivoreAttraction;
+    }
+
+    public void setOmnivoreAttraction(float omnivoreAttraction) {
+           this.omnivoreAttraction = boundaryCheck(omnivoreAttraction, -1.0f, 1.0f);
     }
 
 	public float getDyingAttraction() {

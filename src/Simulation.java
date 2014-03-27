@@ -169,7 +169,7 @@ public class Simulation {
     	// f�rst har vi ett tal mellan 0.0 och 1.0, dra ifr�n en halv f�r -0.5-0.5, multiplicera med 2*0.2 = 0.4 ger mellan -0.2 och 0.2
     	// r�tt?
     	float offset = (r.nextFloat()-0.5f)*(Constants.maxAttributeOffset*2);
-    	int attribute = r.nextInt(5); // NOTE: H�rdkodatat. Fyra olika attributes att �ndra.
+    	int attribute = r.nextInt(6); // NOTE: H�rdkodatat. Fyra olika attributes att �ndra.
     	
     	switch (attribute) {
     	case 0:
@@ -191,6 +191,10 @@ public class Simulation {
     	case 4:
     		gen1.setDyingAttraction(gen1.getDyingAttraction()+offset);
     		gen2.setDyingAttraction(gen2.getDyingAttraction()-offset);
+    		break;
+    	case 5:
+    		gen1.setOmnivoreAttraction(gen1.getOmnivoreAttraction()+offset);
+    		gen2.setOmnivoreAttraction(gen2.getOmnivoreAttraction()-offset);
     		break;
     		
     	}

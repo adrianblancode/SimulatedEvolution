@@ -133,6 +133,7 @@ public class Bacteria extends SimulationEntity{
             		} else {
             			dis.scale(gen.getCarnivoreAttraction() * otherObject.getGenetics().getAggression());
             		}
+            		//dis.scale(gen.getOmnivoreAttraction()*(1-Math.abs(otherObject.getGenetics().getAggression())));
             	} else {
             		dis.scale(gen.getDyingAttraction());
             	}
