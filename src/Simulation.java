@@ -18,9 +18,10 @@ public class Simulation {
     public void spawnCarnivore() {
         Genetics g = new Genetics();
         g.setAggression(1.0f);
-        g.setHerbivoreAttraction(0.2f);
+        g.setHerbivoreAttraction(0.4f);
+        g.setOmnivoreAttraction(0.2f);
         g.setCarnivoreAttraction(0.0f);
-        g.setDyingAttraction(0.5f);
+        g.setDyingAttraction(0.6f);
         g.setPlantAttraction(0.0f);
 
         Bacteria b = new Bacteria(g);
@@ -32,7 +33,8 @@ public class Simulation {
         Genetics g = new Genetics();
         g.setAggression(-1.0f);
         g.setHerbivoreAttraction(0.0f);
-        g.setCarnivoreAttraction(-0.5f);
+        g.setOmnivoreAttraction(-0.7f);
+        g.setCarnivoreAttraction(-0.9f);
         g.setDyingAttraction(0.0f);
         g.setPlantAttraction(0.2f);
 
@@ -45,6 +47,7 @@ public class Simulation {
         Genetics g = new Genetics();
         g.setAggression((float) (0.1-r.nextFloat()*0.2));
         g.setHerbivoreAttraction((float) (0.1-r.nextFloat()*0.2));
+        g.setOmnivoreAttraction(0.0f);
         g.setCarnivoreAttraction((float) (0.1-r.nextFloat()*0.2));
         g.setDyingAttraction((float) (0.1-r.nextFloat()*0.2));
         g.setPlantAttraction((float) (0.2-r.nextFloat()*0.2));
@@ -86,7 +89,7 @@ public class Simulation {
 
         // Add a new plant to the simulation
         Random r = new Random();
-        if (r.nextDouble() < 0.12) {
+        if (r.nextDouble() < 0.15) {
         	Plant p = new Plant();
         	plantList.add(p);
         }

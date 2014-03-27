@@ -43,9 +43,8 @@ public class Bacteria extends SimulationEntity{
         if(isDying() || isDead()){
             return;
         }
-        double bonus = 0;
-        bonus = gen.getAggression()*(-0.10);
-        if ((0.5*(1-getHunger()))+0.5+bonus < rand.nextDouble()) {
+        double bonus = gen.getAggression()*(-0.20);
+        if ((0.5*(1-getHunger())) + 0.5 + bonus < rand.nextDouble()) {
         	return;
         }
         
@@ -107,7 +106,7 @@ public class Bacteria extends SimulationEntity{
                 	bac.setDead(true);
                 }
 
-                addEnergy(eatenEnergy + (int) (eatenEnergy * getGenetics().getAggression()));
+                addEnergy(eatenEnergy + (int) (eatenEnergy * getGenetics().getAggression() - 0.5));
             }
         }
     }
@@ -127,12 +126,17 @@ public class Bacteria extends SimulationEntity{
             }
             else if (otherObject.isBacteria()) {
             	if (!otherObject.isDying()) {
-                    //TODO fixa omnivores
-            		if (otherObject.getGenetics().getAggression() < 0) {
-            			dis.scale(gen.getHerbivoreAttraction() * -otherObject.getGenetics().getAggression());
-            		} else {
-            			dis.scale(gen.getCarnivoreAttraction() * otherObject.getGenetics().getAggression());
-            		}
+
+                    //If the bacteria is an omnivore
+            		if (otherObject.getGenetics().getAggression() == 0) {
+            			dis.scale(gen.getOmnivoreAttraction());
+                    //If herbivore
+            		} else if (otherObject.getGenetics().getAggression() < 0){
+            			dis.scale(gen.getHerbivoreAttraction() * -otherObject.getGenetics().getAggression() + gen.getOmnivoreAttraction() * (1 + otherObject.getGenetics().getAggression()));
+                    //If carnivore
+            		} else if (otherObject.getGenetics().getAggression() > 0){
+                        dis.scale(gen.getCarnivoreAttraction() * otherObject.getGenetics().getAggression() + gen.getOmnivoreAttraction() * (1 - otherObject.getGenetics().getAggression()));
+                    }
             		//dis.scale(gen.getOmnivoreAttraction()*(1-Math.abs(otherObject.getGenetics().getAggression())));
             	} else {
             		dis.scale(gen.getDyingAttraction());

@@ -17,9 +17,10 @@ public class Genetics {
     //Creates a gene with pre-defined values.
     public Genetics() {
     	Random r = new Random();
-        setAggression((float) ((r.nextFloat()*2)-1));
+        setAggression(0);
         setPlantAttraction((getAggression()>0) ? 0 : getAggression()*(-1));
         setHerbivoreAttraction(0f);
+        setOmnivoreAttraction(0f);
         setCarnivoreAttraction((getAggression()>0) ? 0 : getAggression()*(-1));
         
         if (getAggression() < 0) {
@@ -51,7 +52,7 @@ public class Genetics {
     }
 
     public void setPlantAttraction(float plantAttraction) {
-    	this.plantAttraction = boundaryCheck(plantAttraction, -0.2f, 1.0f);
+    	this.plantAttraction = boundaryCheck(plantAttraction, -1.0f, 1.0f);
     }
 
     public float getHerbivoreAttraction() {
@@ -83,7 +84,7 @@ public class Genetics {
 	}
 
 	public void setDyingAttraction(float dyingAttraction) {
-        this.dyingAttraction = boundaryCheck(dyingAttraction, 0.0f, 1.0f);
+        this.dyingAttraction = boundaryCheck(dyingAttraction, -1.0f, 1.0f);
 	}
 	
 	private float boundaryCheck(float value, float lowerBound, float upperBound) {
