@@ -86,7 +86,7 @@ public class Simulation {
 
         // Add a new plant to the simulation
         Random r = new Random();
-        if (r.nextDouble() < 0.15) {
+        if (r.nextDouble() < 0.12) {
         	Plant p = new Plant();
         	plantList.add(p);
         }
