@@ -7,11 +7,18 @@ public class Simulation {
     private ArrayList<Bacteria> bacteriaList;
     private ArrayList<Plant> plantList;
     private int ticks;
+    
+    private Logger logger;
+    private int deadRemoved;
+    private int reproductionsDone;
 
     public Simulation(){
         bacteriaList = new ArrayList<Bacteria>();
         plantList = new ArrayList<Plant>();
         ticks = 0;
+        logger = new Logger();
+        deadRemoved = 0;
+        reproductionsDone = 0;
     }
     
     // Creates a carnivore and spawns it on a random position
@@ -79,6 +86,13 @@ public class Simulation {
     public void run() {
 
         incrementTicks();
+        
+        if (ticks % 100 == 0) {
+        	logger.doLogging(ticks, bacteriaList, plantList, deadRemoved, reproductionsDone);
+        }
+        if (ticks % 10000 == 0) {
+        	logger.doPrintout();
+        }
 
         // We do the reproduction first. That way the old bacteria will be cleaned away right afterwards.
         doReproduction();
@@ -111,6 +125,7 @@ public class Simulation {
             Bacteria bac = iter.next();
 
             if(bac.isDead()){
+            	++deadRemoved;
                 iter.remove();
                 bac = null;
 
@@ -138,6 +153,8 @@ public class Simulation {
     }
     
     public void doReproduction() {
+    	++reproductionsDone;
+    	
     	// We first put the new bacteria into a list and add them afterwards.
     	// That way the new bacteria won't be run in the loop.
     	ArrayList<Bacteria> newBacteria = new ArrayList<Bacteria>();
