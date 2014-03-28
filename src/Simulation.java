@@ -7,11 +7,18 @@ public class Simulation {
     private ArrayList<Bacteria> bacteriaList;
     private ArrayList<Plant> plantList;
     private int ticks;
+    
+    private Logger logger;
+    private int deadRemoved;
+    private int reproductionsDone;
 
     public Simulation(){
         bacteriaList = new ArrayList<Bacteria>();
         plantList = new ArrayList<Plant>();
         ticks = 0;
+        logger = new Logger();
+        deadRemoved = 0;
+        reproductionsDone = 0;
     }
     
     // Creates a carnivore and spawns it on a random position
@@ -79,6 +86,13 @@ public class Simulation {
     public void run() {
 
         incrementTicks();
+        
+        if (ticks % 100 == 0) {
+        	logger.doLogging(ticks, bacteriaList, plantList, deadRemoved, reproductionsDone);
+        }
+        if (ticks % 10000 == 0) {
+        	logger.doPrintout();
+        }
 
         // We do the reproduction first. That way the old bacteria will be cleaned away right afterwards.
         doReproduction();
@@ -111,6 +125,7 @@ public class Simulation {
             Bacteria bac = iter.next();
 
             if(bac.isDead()){
+            	++deadRemoved;
                 iter.remove();
                 bac = null;
 
@@ -145,6 +160,8 @@ public class Simulation {
     	for (Bacteria b : bacteriaList) {
     		// If it meets the reproduction criteria and isn't dead, then reproduce.
     		if (b.getAge() >= Constants.reproductionAge && b.getEnergy() >= Constants.reproductionEnergy && !b.isDead() && !b.isDying()) {
+    	    	++reproductionsDone;
+    	    	
     			Genetics[] newGens = makeNewGenetics(b.getGenetics());
     			newBacteria.add(new Bacteria(newGens[0], b.getXpos()-10, b.getYpos()));
     			newBacteria.add(new Bacteria(newGens[1], b.getXpos()+10, b.getYpos()));
