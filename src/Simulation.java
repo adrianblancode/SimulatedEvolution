@@ -153,8 +153,6 @@ public class Simulation {
     }
     
     public void doReproduction() {
-    	++reproductionsDone;
-    	
     	// We first put the new bacteria into a list and add them afterwards.
     	// That way the new bacteria won't be run in the loop.
     	ArrayList<Bacteria> newBacteria = new ArrayList<Bacteria>();
@@ -162,6 +160,8 @@ public class Simulation {
     	for (Bacteria b : bacteriaList) {
     		// If it meets the reproduction criteria and isn't dead, then reproduce.
     		if (b.getAge() >= Constants.reproductionAge && b.getEnergy() >= Constants.reproductionEnergy && !b.isDead() && !b.isDying()) {
+    	    	++reproductionsDone;
+    	    	
     			Genetics[] newGens = makeNewGenetics(b.getGenetics());
     			newBacteria.add(new Bacteria(newGens[0], b.getXpos()-10, b.getYpos()));
     			newBacteria.add(new Bacteria(newGens[1], b.getXpos()+10, b.getYpos()));
