@@ -154,7 +154,7 @@ public class Logger {
 		
 		@Override
 		public String toString() {
-			return "("+value+","+tick+")";
+			return tick/100+","+value+";";
 		}
 		
 		@Override
