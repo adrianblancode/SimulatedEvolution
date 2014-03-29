@@ -87,10 +87,13 @@ public class Simulation {
 
         incrementTicks();
         
+        //Logs internally every second
         if (ticks % 100 == 0) {
         	logger.doLogging(ticks, bacteriaList, plantList, deadRemoved, reproductionsDone);
         }
-        if (ticks % 10000 == 0) {
+        
+        //Writes to the logs every minute
+        if (ticks % (60 * 100) == 0) {
         	logger.doPrintout();
         }
 
@@ -188,7 +191,7 @@ public class Simulation {
     	// OBS inte s�ker p� att detta blir helt r�tt.
     	// f�rst har vi ett tal mellan 0.0 och 1.0, dra ifr�n en halv f�r -0.5-0.5, multiplicera med 2*0.2 = 0.4 ger mellan -0.2 och 0.2
     	// r�tt?
-    	float offset = (r.nextFloat()-0.5f)*(Constants.maxAttributeOffset*2);
+    	float offset = (2 * (r.nextFloat() -0.5f)) * (Constants.maxAttributeOffset);
     	int attribute = r.nextInt(6); // NOTE: H�rdkodatat. Fyra olika attributes att �ndra.
     	
     	switch (attribute) {

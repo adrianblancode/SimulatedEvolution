@@ -40,18 +40,18 @@ public class Start {
         sim.start(80);
         
         for (int i = 0; i < 60; ++i) {
-        	sim.spawnHerbivore();
+        	//sim.spawnHerbivore();
         }
 
         for (int i = 0; i < 15; ++i) {
-        	sim.spawnCarnivore();
+        	//sim.spawnCarnivore();
         }
         
         for (int i = 0; i < 40; ++i) {
         	sim.spawnDying();
         }
          
-        for (int i = 0; i < 40; ++i) {
+        for (int i = 0; i < 100; ++i) {
         	sim.spawnNeutral();
         }
         

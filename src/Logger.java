@@ -20,6 +20,8 @@ public class Logger {
 	private int oldReproductionsDone;
 	private int oldDeadRemoved;
 	
+	String filename;
+	
 	public Logger() {
 		bacteriaCount = new ArrayList<Tuple>();
 		plantCount = new ArrayList<Tuple>();
@@ -35,6 +37,8 @@ public class Logger {
 		
 		oldReproductionsDone = 0;
 		oldDeadRemoved = 0;
+		
+		 filename = "SimEv_"+new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime())+".m";
 	}
 	
 	public void doLogging(int tick, ArrayList<Bacteria> baclist, ArrayList<Plant> plantlist, int deadRemoved, int reproductionsDone) {
@@ -74,42 +78,40 @@ public class Logger {
 	}
 	
 	public void doPrintout() {
-		String filename = "SimEv_"+new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime())+".txt";
 		
 		StringBuilder sb = new StringBuilder();
-		
-		
-		sb.append("Num bacteria:\n");
+				
+		sb.append("numBacteria = ");
 		listToString(sb, bacteriaCount);
 		
-		sb.append("Num dying:\n");
+		sb.append("numDying = ");
 		listToString(sb, dyingCount);
 		
-		sb.append("Birth rate:\n");
+		sb.append("birthRate = ");
 		listToString(sb, birthRate);
 		
-		sb.append("Death rate:\n");
+		sb.append("deathRate = ");
 		listToString(sb, deathRate);
 		
-		sb.append("Num plants:\n");
+		sb.append("numPlants = ");
 		listToString(sb, plantCount);
 		
-		sb.append("Agression values:\n");
+		sb.append("agression = ");
 		listToString(sb, aggressionValues);
 		
-		sb.append("Carnivore attractions:\n");
+		sb.append("carnivoreAttraction = ");
 		listToString(sb, carnivoreAttractions);
 		
-		sb.append("Herbivore attractions:\n");
+		sb.append("herbivoreAttraction = ");
 		listToString(sb, herbivoreAttractions);
 		
-		sb.append("Omnivore attractions:\n");
+		sb.append("omnivoreAttraction = ");
 		listToString(sb, omnivoreAttractions);
 		
-		sb.append("Plant attractions:\n");
+		sb.append("plantAttraction = ");
 		listToString(sb, plantAttractions);
 		
-		sb.append("Dying attractions:\n");
+		sb.append("dyingAttraction = ");
 		listToString(sb, dyingAttractions);
 		
 		
@@ -131,14 +133,9 @@ public class Logger {
 		
 		boolean first = true;
 		for (Tuple t : array) {
-			if (first) {
-				first = false;
-			} else {
-				sb.append(",");
-			}
 			sb.append(t.toString());
 		}
-		sb.append("]\n");
+		sb.append("];\n");
 		
 	}
 	
@@ -154,7 +151,7 @@ public class Logger {
 		
 		@Override
 		public String toString() {
-			return tick/100+","+value+";";
+			return tick/100+", "+value+"; ";
 		}
 		
 		@Override
