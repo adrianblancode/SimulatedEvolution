@@ -43,6 +43,8 @@ public class Bacteria extends SimulationEntity{
         if(isDying() || isDead()){
             return;
         }
+        
+        //We give a small positive movement bonus to herbivores, and negative to carnivores
         double bonus = gen.getAggression()*(-0.20);
         if ((0.5*(1-getHunger())) + 0.5 + bonus < rand.nextDouble()) {
         	return;
@@ -92,14 +94,12 @@ public class Bacteria extends SimulationEntity{
     }
 
     private void eatBacteria(Bacteria bac){
-    	if (getGenetics().getAggression() < -0.5) {
-    		return;
-    	}
+    	
     	int e = bac.getEnergy();
     	
         if (!bac.isDead() && e > 0) {
 
-            if(bac.isDying() || (this.getGenetics().getAggression() - bac.getGenetics().getAggression()) > 1.0 * getHunger()){ //Scale by hunger later
+            if(bac.isDying() || (this.getGenetics().getAggression() - bac.getGenetics().getAggression()) > 0.5){ //Scale by hunger later
             	int eatenEnergy = Math.min(e, 50);
                 bac.dropEnergy(eatenEnergy);
                 if (e - eatenEnergy <= 0) {
@@ -127,17 +127,19 @@ public class Bacteria extends SimulationEntity{
             else if (otherObject.isBacteria()) {
             	if (!otherObject.isDying()) {
 
-                    //If the bacteria is an omnivore
+            		//We classify depending on whether their aggression is above or below zero. 
+            		//For example at 0.2 aggression we classify as 80% omnivore, 20% carnivore 
+            		
+                    //If the bacteria is exactly an omnivore
             		if (otherObject.getGenetics().getAggression() == 0) {
             			dis.scale(gen.getOmnivoreAttraction());
-                    //If herbivore
+                    //If leans towards herbivore
             		} else if (otherObject.getGenetics().getAggression() < 0){
             			dis.scale(gen.getHerbivoreAttraction() * -otherObject.getGenetics().getAggression() + gen.getOmnivoreAttraction() * (1 + otherObject.getGenetics().getAggression()));
-                    //If carnivore
+                    //If leans toward carnivore
             		} else if (otherObject.getGenetics().getAggression() > 0){
                         dis.scale(gen.getCarnivoreAttraction() * otherObject.getGenetics().getAggression() + gen.getOmnivoreAttraction() * (1 - otherObject.getGenetics().getAggression()));
                     }
-            		//dis.scale(gen.getOmnivoreAttraction()*(1-Math.abs(otherObject.getGenetics().getAggression())));
             	} else {
             		dis.scale(gen.getDyingAttraction());
             	}
@@ -267,7 +269,7 @@ public class Bacteria extends SimulationEntity{
             dropEnergy(2);
         }
 
-        if (getEnergy() == 0) {
+        if (getEnergy() <= 0) {
         	setDead(true);
         }
     }
