@@ -45,8 +45,8 @@ public class Bacteria extends SimulationEntity{
         }
         
         //We give a small positive movement bonus to herbivores, and negative to carnivores
-        double bonus = gen.getAggression()*(-0.20);
-        if ((0.5*(1-getHunger())) + 0.5 + bonus < rand.nextDouble()) {
+        double boost = gen.getAggression() * (-0.15);
+        if ((0.5*(1-getHunger())) + 0.5 + boost < rand.nextDouble()) {
         	return;
         }
         
@@ -99,14 +99,44 @@ public class Bacteria extends SimulationEntity{
     	
         if (!bac.isDead() && e > 0) {
 
-            if(bac.isDying() || (this.getGenetics().getAggression() - bac.getGenetics().getAggression()) > 0.5){ //Scale by hunger later
-            	int eatenEnergy = Math.min(e, 50);
+        	float aggressionDiff = this.getGenetics().getAggression() - bac.getGenetics().getAggression();
+        	
+        	if(bac.isDying()){
+        		int eatenEnergy = Math.min(e, 50);
                 bac.dropEnergy(eatenEnergy);
                 if (e - eatenEnergy <= 0) {
                 	bac.setDead(true);
                 }
 
                 addEnergy(eatenEnergy + (int) (eatenEnergy * getGenetics().getAggression() - 0.5));
+        	}
+        	
+        	//If the bacteria is aggressive (or hungry) enough it takes a chance at eating
+        	else if(aggressionDiff > (Constants.safeEating - Constants.maxHungerDesperation * getHunger())){
+            	
+            	//Determines chance of victory based on aggression. 50% initial chance and increasing with aggression  
+        		boolean victory = rand.nextFloat() < 0.50 + (aggressionDiff) / Constants.safeEating;
+            	
+            	//We determine who takes a bite of whom
+            	if(victory){
+            	
+	            	int eatenEnergy = Math.min(e, 50);
+	                bac.dropEnergy(eatenEnergy);
+	                if (e - eatenEnergy <= 0) {
+	                	bac.setDead(true);
+	                }
+	
+	                addEnergy(eatenEnergy + (int) (eatenEnergy * getGenetics().getAggression() - 0.5));
+	            } else if(!victory){
+                	
+	            	int eatenEnergy = Math.min(this.getEnergy(), 50);
+	                this.dropEnergy(eatenEnergy);
+	                if (e - eatenEnergy <= 0) {
+	                	this.setDead(true);
+	                }
+	
+	                bac.addEnergy(eatenEnergy + (int) (eatenEnergy * bac.getGenetics().getAggression() - 0.5));
+	            }
             }
         }
     }
@@ -276,5 +306,11 @@ public class Bacteria extends SimulationEntity{
     
     public boolean isBacteria() {
     	return true;
+    }
+    
+    public void remove(){
+    	gen = null;
+    	rand = null;
+    	lastMovement = null;
     }
 }

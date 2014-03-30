@@ -36,7 +36,7 @@ public class Start {
         int sleep = 0;
         float res = 0;
         
-        // Runs statup on the simulation.
+        // Runs startup on the simulation.
         sim.start(80);
         
         for (int i = 0; i < 80; ++i) {

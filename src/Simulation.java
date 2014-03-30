@@ -106,7 +106,7 @@ public class Simulation {
 
         // Add a new plant to the simulation
         Random r = new Random();
-        if (r.nextDouble() < 0.15) {
+        if (r.nextDouble() < 0.20) {
         	Plant p = new Plant();
         	plantList.add(p);
         }
@@ -130,6 +130,7 @@ public class Simulation {
             if(bac.isDead()){
             	++deadRemoved;
                 iter.remove();
+                bac.remove();
                 bac = null;
 
                 System.out.println("Dead bacteria removed. Num bacteria:"+bacteriaList.size());
@@ -150,6 +151,7 @@ public class Simulation {
 
             if(p.isDead()){
                 iter.remove();
+                p.remove();
                 p = null;
             }
         }

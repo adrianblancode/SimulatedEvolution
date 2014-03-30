@@ -31,4 +31,9 @@ public class Plant extends SimulationEntity {
 		return true;
 	}
 	
+	
+    public void remove(){
+    	rand = null;
+    	color = null;
+    }
 }
