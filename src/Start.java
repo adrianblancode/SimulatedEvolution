@@ -64,8 +64,8 @@ public class Start {
             sim.run();
             canvas.paint();
 
-            canvas.drawText(Integer.toString(sim.getTicks()), 0, 12);
-            canvas.drawText(Integer.toString((int) res), 0, 24);
+            canvas.drawText(Integer.toString(sim.getTicks()/100) + "s", 0, 12);
+            canvas.drawText(Integer.toString((int) res) + "%", 0, 24);
             canvas.update();
 
             time = System.nanoTime() - time;

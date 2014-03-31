@@ -16,6 +16,7 @@ public class Logger {
 	private ArrayList<Tuple> dyingAttractions;
 	private ArrayList<Tuple> birthRate;
 	private ArrayList<Tuple> deathRate;
+    StringBuilder sb;
 
 	private int oldReproductionsDone;
 	private int oldDeadRemoved;
@@ -23,6 +24,9 @@ public class Logger {
 	String filename;
 	
 	public Logger() {
+
+        sb = new StringBuilder();
+
 		bacteriaCount = new ArrayList<Tuple>();
 		plantCount = new ArrayList<Tuple>();
 		dyingCount = new ArrayList<Tuple>();
@@ -49,11 +53,11 @@ public class Logger {
 		
 		for (Bacteria b : baclist) {
 			if (b.isDead())
-				continue; // Hoppa över döda bakterier
+				continue; // Hoppa ï¿½ver dï¿½da bakterier
 			
 			if (b.isDying()) {
 				++numDying;
-				continue; // Logga inte värden för dying
+				continue; // Logga inte vï¿½rden fï¿½r dying
 			} else {
 				++numLiving;
 			}
@@ -67,7 +71,6 @@ public class Logger {
 		
 		dyingCount.add(new Tuple(tick, numDying));
 		bacteriaCount.add(new Tuple(tick, numLiving));
-		
 
 		deathRate.add(new Tuple(tick, deadRemoved-oldDeadRemoved));
 		birthRate.add(new Tuple(tick, reproductionsDone-oldReproductionsDone));
@@ -78,9 +81,7 @@ public class Logger {
 	}
 	
 	public void doPrintout() {
-		
-		StringBuilder sb = new StringBuilder();
-				
+
 		sb.append("numBacteria = ");
 		listToString(sb, bacteriaCount);
 		
@@ -123,9 +124,11 @@ public class Logger {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	
-		
-	}
+
+        writer = null;
+        sb.setLength(0); // set length of buffer to 0
+        sb.trimToSize(); // trim the underlying buffer
+    }
 	
 	
 	private void listToString(StringBuilder sb, ArrayList<Tuple> array) {
