@@ -127,7 +127,6 @@ public class Logger {
 
         writer = null;
         sb.setLength(0); // set length of buffer to 0
-        sb.trimToSize(); // trim the underlying buffer
     }
 	
 	
