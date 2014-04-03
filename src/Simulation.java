@@ -63,6 +63,20 @@ public class Simulation {
         bacteriaList.add(b);
     }
     
+    public void spawnRandom() {
+    	Random r = new Random();
+        Genetics g = new Genetics();
+        g.setAggression((float) (2 * r.nextFloat() - 1));
+        g.setHerbivoreAttraction((float) (2 * r.nextFloat() - 1));
+        g.setOmnivoreAttraction((float) (2 * r.nextFloat() - 1));
+        g.setCarnivoreAttraction((float) (2 * r.nextFloat() - 1));
+        g.setDyingAttraction((float) (2 * r.nextFloat() - 1));
+        g.setPlantAttraction((float) (2 * r.nextFloat() - 1));
+
+        Bacteria b = new Bacteria(g);
+        bacteriaList.add(b);
+    }
+    
     public void spawnDying() {
     	Bacteria b =  new Bacteria();
     	b.setEnergy((int)(Constants.maxEnergy*0.29));
@@ -87,13 +101,13 @@ public class Simulation {
 
         incrementTicks();
         
-        //Logs internally every second
-        if (ticks % 100 == 0) {
+        //Logs internally every 10 seconds
+        if (ticks % (10 * 100) == 0) {
         	logger.doLogging(ticks, bacteriaList, plantList, deadRemoved, reproductionsDone);
         }
         
-        //Writes to the logs every minute
-        if (ticks % (60 * 100) == 0) {
+        //Writes to the logs every 2 minutes
+        if (ticks % (2 * 60 * 100) == 0) {
         	logger.doPrintout();
         }
 

@@ -52,7 +52,7 @@ public class Start {
         }
          
         for (int i = 0; i < 80; ++i) {
-        	sim.spawnNeutral();
+        	sim.spawnRandom();
         }
         
         
