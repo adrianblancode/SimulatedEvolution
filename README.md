@@ -5,6 +5,12 @@ This project was created by Adrian Blanco and Johan Storby as part of our bachel
 
 [Thesis \[PDF\]](http://adrianblan.co/content/Adrian_Blanco_Candidate_Thesis.pdf)
 
-#### Images
+### Images
 
 ![Simulated Evolution](http://i.imgur.com/bpZYT7c.png)
+
+### Video
+
+[Created bacteria](https://www.youtube.com/watch?v=krXCfn_cC9E)
+
+[Evolved bacteria](https://www.youtube.com/watch?v=acZAoi_xHV0)
